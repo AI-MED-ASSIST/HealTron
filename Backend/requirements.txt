@@ -1,0 +1,5 @@
+flask
+google-generativeai
+requests
+beautifulsoup4
+langchain
