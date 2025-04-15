@@ -9,26 +9,56 @@ const About = () => {
   const featureControls = useAnimation();
 
   const features = [
-    { title: "Evidence-Based", description: "Recommendations backed by medical research", icon: "📊", color: "bg-amber-50 text-amber-600" },
-    { title: "Personalized Care", description: "AI-driven insights tailored to your unique health profile", icon: "🧠", color: "bg-blue-50 text-blue-600" },
-    { title: "Real-Time Support", description: "24/7 assistance when you need it most", icon: "⚡", color: "bg-teal-50 text-teal-600" },
-    { title: "Secure & Private", description: "Enterprise-grade security for your medical data", icon: "🛡️", color: "bg-purple-50 text-purple-600" },
+    {
+      title: "Evidence-Based",
+      description: "Recommendations backed by medical research",
+      icon: "📊",
+      color: "bg-amber-50 text-amber-600",
+    },
+    {
+      title: "Personalized Care",
+      description: "AI-driven insights tailored to your unique health profile",
+      icon: "🧠",
+      color: "bg-blue-50 text-blue-600",
+    },
+    {
+      title: "Real-Time Support",
+      description: "24/7 assistance when you need it most",
+      icon: "⚡",
+      color: "bg-teal-50 text-teal-600",
+    },
+    {
+      title: "Secure & Private",
+      description: "Enterprise-grade security for your medical data",
+      icon: "🛡️",
+      color: "bg-purple-50 text-purple-600",
+    },
   ];
-  const featureAnimation = (index) => {
+  const featureAnimation = (index: any) => {
     const positions = [
-      { x: -300, y: -300 }, 
-      { x: 300, y: -300 }, 
-      { x: -300, y: 300 }, 
-      { x: 300, y: 300 }, 
+      { x: -300, y: -300 },
+      { x: 300, y: -300 },
+      { x: -300, y: 300 },
+      { x: 300, y: 300 },
     ];
     return {
-      hidden: { opacity: 0, scale: 0.5, x: positions[index].x, y: positions[index].y },
+      hidden: {
+        opacity: 0,
+        scale: 0.5,
+        x: positions[index].x,
+        y: positions[index].y,
+      },
       visible: {
         opacity: 1,
         scale: 1,
-        x: 270 * Math.cos((index * 90) * (Math.PI / 180)),
-        y: 270 * Math.sin((index * 90) * (Math.PI / 180)),
-        transition: { type: "spring", stiffness: 120, damping: 10, delay: index * 0.15 },
+        x: 270 * Math.cos(index * 90 * (Math.PI / 180)),
+        y: 270 * Math.sin(index * 90 * (Math.PI / 180)),
+        transition: {
+          type: "spring",
+          stiffness: 120,
+          damping: 10,
+          delay: index * 0.15,
+        },
       },
     };
   };
@@ -57,7 +87,7 @@ const About = () => {
       const runAnimations = async () => {
         await centerControls.start("hidden");
         await featureControls.start("hidden");
- 
+
         await centerControls.start("visible");
         await featureControls.start("visible");
 

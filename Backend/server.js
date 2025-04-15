@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.routes");
 const chatRoutes = require("./routes/chat.routes"); // assuming you have chat functionality also
 const authRoutes = require("./routes/auth.routes");
+const chatHistoryRoutes = require("./routes/chatHistory.routes"); // chathistory routes
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes); // if applicable
 app.use("/api/auth", authRoutes); //authentication routes
+app.use("/api/chat/history", chatHistoryRoutes); // route for chat history
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

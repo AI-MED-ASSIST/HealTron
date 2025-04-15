@@ -1,18 +1,3 @@
-// // backend/models/user.model.js
-
-// const mongoose = require("mongoose");
-
-// const userSchema = new mongoose.Schema({
-//   username: { type: String, required: true },
-//   password: { type: String, required: true },
-//   // Add any additional fields as needed (email, password hash, etc.)
-// });
-
-// const User = mongoose.model("User", userSchema);
-
-// module.exports = User;
-
-// backend/models/user.model.js
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -57,16 +42,10 @@ const userSchema = new mongoose.Schema({
   height: {
     type: Number,
   },
-  // Exactly 3 emergency contacts (in addition to the primary emergencyContact field)
+  // Additional emergency contacts are optional
   emergencyContacts: {
     type: [String],
-    validate: {
-      validator: function (arr) {
-        // Allow empty array or exactly 3 contacts if provided
-        return arr.length === 0 || arr.length === 3;
-      },
-      message: "Emergency contacts should be empty or exactly 3 numbers.",
-    },
+    default: [],
   },
   // Array of strings to hold any number of medical conditions
   medicalConditions: {

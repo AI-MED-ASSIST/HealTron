@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 right-0 h-full w-1/4 bg-gray-900 text-white p-6 z-50 shadow-2xl">
+    <div className="fixed top-0 right-0 h-full w-1/4 bg-gray-900 text-white p-6 z-[100] shadow-2xl">
       {/* Back Button */}
       <button
         onClick={onClose}

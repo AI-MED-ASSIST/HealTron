@@ -61,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
             ))}
           </div>
 
-          {/* Right side: Profile icon */}
+          {/* Right side: Profile icon with username */}
           <div className="flex items-center">
             <button onClick={onProfileClick} className="focus:outline-none">
               {sidebarOpen ? (
@@ -77,7 +77,9 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
                 />
               )}
             </button>
-
+            {user?.username && (
+              <span className="ml-2 text-white text-md">{user.username}</span>
+            )}
             {/* Mobile Navigation Button */}
             <div className="md:hidden ml-4">
               <button

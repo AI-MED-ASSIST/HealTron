@@ -16,6 +16,7 @@ const EditProfilePage: React.FC = () => {
     emergencyContact: "",
     profilePic: "",
     age: "",
+    gender: "",
     height: "",
     weight: "",
     emergencyContacts: ["", "", ""],
@@ -65,7 +66,7 @@ const EditProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 text-white bg-gray-900 min-h-screen">
+    <div className="container p-6 text-white bg-gray-900 min-h-screen flex flex-col items-center justify-center min-w-full pt-20">
       <h1 className="text-3xl mb-6 font-bold text-center">
         {id === "new" ? "Complete Your Profile" : "Edit Profile"}
       </h1>
@@ -75,7 +76,10 @@ const EditProfilePage: React.FC = () => {
           Saving profile... Please wait.
         </div>
       )}
-      <form onSubmit={handleUpdate} className="space-y-6 max-w-2xl mx-auto">
+      <form
+        onSubmit={handleUpdate}
+        className="space-y-6 flex flex-col w-full max-w-2xl"
+      >
         {/* New field: Profile Image URL */}
         <div>
           <label className="block mb-2">Profile Image URL</label>
@@ -96,102 +100,162 @@ const EditProfilePage: React.FC = () => {
           )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={profile.username || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={profile.email || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
+          <div>
+            <label className="block mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={profile.username || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={profile.email || ""}
+              onChange={handleChange}
+              disabled
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none opacity-75 cursor-not-allowed"
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={profile.phone || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
-          <input
-            type="text"
-            name="emergencyContact"
-            placeholder="Primary Emergency Contact"
-            value={profile.emergencyContact || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
+          <div>
+            <label className="block mb-2">Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              value={profile.phone || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Primary Emergency Contact</label>
+            <input
+              type="text"
+              name="emergencyContact"
+              placeholder="Primary Emergency Contact"
+              value={profile.emergencyContact || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <input
-            type="number"
-            name="height"
-            placeholder="Height (cm)"
-            value={profile.height || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
-          <input
-            type="number"
-            name="weight"
-            placeholder="Weight (kg)"
-            value={profile.weight || ""}
-            onChange={handleChange}
-            required
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
+          <div>
+            <label className="block mb-2">Height (cm)</label>
+            <input
+              type="number"
+              name="height"
+              placeholder="Height (cm)"
+              value={profile.height || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Weight (kg)</label>
+            <input
+              type="number"
+              name="weight"
+              placeholder="Weight (kg)"
+              value={profile.weight || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
         </div>
+        {/* Age and Gender fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block mb-2">Age</label>
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              value={profile.age || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Gender</label>
+            <select
+              name="gender"
+              value={profile.gender || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            >
+              <option value="" disabled>
+                Select Gender
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        {/* Additional emergency contacts */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <input
-            type="text"
-            name="emergencyContacts0"
-            placeholder="Additional Emergency Contact 1"
-            value={profile.emergencyContacts?.[0] || ""}
-            onChange={(e) => {
-              const contacts = profile.emergencyContacts || ["", "", ""];
-              contacts[0] = e.target.value;
-              setProfile({ ...profile, emergencyContacts: contacts });
-            }}
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
-          <input
-            type="text"
-            name="emergencyContacts1"
-            placeholder="Additional Emergency Contact 2"
-            value={profile.emergencyContacts?.[1] || ""}
-            onChange={(e) => {
-              const contacts = profile.emergencyContacts || ["", "", ""];
-              contacts[1] = e.target.value;
-              setProfile({ ...profile, emergencyContacts: contacts });
-            }}
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
-          <input
-            type="text"
-            name="emergencyContacts2"
-            placeholder="Additional Emergency Contact 3"
-            value={profile.emergencyContacts?.[2] || ""}
-            onChange={(e) => {
-              const contacts = profile.emergencyContacts || ["", "", ""];
-              contacts[2] = e.target.value;
-              setProfile({ ...profile, emergencyContacts: contacts });
-            }}
-            className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
-          />
+          <div>
+            <label className="block mb-2">Emergency Contact 1</label>
+            <input
+              type="text"
+              name="emergencyContacts0"
+              placeholder="Additional Emergency Contact 1"
+              value={profile.emergencyContacts?.[0] || ""}
+              onChange={(e) => {
+                const contacts = profile.emergencyContacts || ["", "", ""];
+                contacts[0] = e.target.value;
+                setProfile({ ...profile, emergencyContacts: contacts });
+              }}
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Emergency Contact 2</label>
+            <input
+              type="text"
+              name="emergencyContacts1"
+              placeholder="Additional Emergency Contact 2"
+              value={profile.emergencyContacts?.[1] || ""}
+              onChange={(e) => {
+                const contacts = profile.emergencyContacts || ["", "", ""];
+                contacts[1] = e.target.value;
+                setProfile({ ...profile, emergencyContacts: contacts });
+              }}
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block mb-2">Emergency Contact 3</label>
+            <input
+              type="text"
+              name="emergencyContacts2"
+              placeholder="Additional Emergency Contact 3"
+              value={profile.emergencyContacts?.[2] || ""}
+              onChange={(e) => {
+                const contacts = profile.emergencyContacts || ["", "", ""];
+                contacts[2] = e.target.value;
+                setProfile({ ...profile, emergencyContacts: contacts });
+              }}
+              className="w-full p-3 rounded-md bg-gray-800 focus:outline-none"
+            />
+          </div>
         </div>
         <button
           type="button"
