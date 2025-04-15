@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { useInView  } from 'react-intersection-observer';
-import { Send, Phone, Mail, MapPin } from 'lucide-react';
-import React, { useState } from 'react';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { Send, Phone, Mail, MapPin } from "lucide-react";
+import React, { useState } from "react";
 
 const Contact = () => {
   const [ref, inView] = useInView({
@@ -10,32 +10,32 @@ const Contact = () => {
   });
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', message: '' });
+    console.log("Form submitted:", formData);
+    setFormData({ name: "", email: "", message: "" });
   };
 
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Phone',
-      details: '00000 00000',
+      title: "Phone",
+      details: "00000 00000",
     },
     {
       icon: Mail,
-      title: 'Email',
-      details: 'dineshsince2004@gmail.com',
+      title: "Email",
+      details: "aimedassist7@gmail.com",
     },
     {
       icon: MapPin,
-      title: 'Location',
-      details: 'Kathir College of Engineering, Coimbatore.',
+      title: "Location",
+      details: "Kathir College of Engineering, Coimbatore.",
     },
   ];
 
@@ -88,42 +88,57 @@ const Contact = () => {
           >
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Name
                 </label>
                 <input
                   type="text"
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Message
                 </label>
                 <textarea
                   id="message"
                   rows={4}
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 ></textarea>
@@ -146,4 +161,3 @@ const Contact = () => {
 };
 
 export default Contact;
-

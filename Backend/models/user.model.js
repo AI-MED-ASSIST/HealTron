@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
+    default: "",
     // Store a URL or file path
   },
   age: {

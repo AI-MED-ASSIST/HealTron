@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 // Import your routes
 const userRoutes = require("./routes/user.routes");
 const chatRoutes = require("./routes/chat.routes"); // assuming you have chat functionality also
+const authRoutes = require("./routes/auth.routes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cors());
 // Set up routes
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes); // if applicable
+app.use("/api/auth", authRoutes); //authentication routes
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
