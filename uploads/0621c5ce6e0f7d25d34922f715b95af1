@@ -1,0 +1,367 @@
+[
+  {
+    "name": "Tuberculosis",
+    "description": "A bacterial infection that primarily affects the lungs and is highly prevalent in India."
+  },
+  {
+    "name": "Malaria",
+    "description": "A mosquito-borne disease caused by Plasmodium parasites, common in tropical regions."
+  },
+  {
+    "name": "Dengue Fever",
+    "description": "A viral infection transmitted by Aedes mosquitoes, leading to high fever and severe joint pain."
+  },
+  {
+    "name": "Chikungunya",
+    "description": "A viral disease transmitted by mosquitoes, causing fever and severe joint pain."
+  },
+  {
+    "name": "Typhoid Fever",
+    "description": "A bacterial infection spread through contaminated food and water, causing high fever and abdominal pain."
+  },
+  {
+    "name": "Hepatitis A",
+    "description": "A viral liver disease transmitted through ingestion of contaminated food and water."
+  },
+  {
+    "name": "Hepatitis B",
+    "description": "A serious liver infection caused by the hepatitis B virus, transmitted through bodily fluids."
+  },
+  {
+    "name": "Hepatitis C",
+    "description": "A liver disease caused by the hepatitis C virus, often leading to chronic liver problems."
+  },
+  {
+    "name": "HIV/AIDS",
+    "description": "A viral infection that attacks the immune system, leading to acquired immunodeficiency syndrome."
+  },
+  {
+    "name": "Leprosy",
+    "description": "A chronic infectious disease causing skin lesions and nerve damage."
+  },
+  {
+    "name": "Kala Azar",
+    "description": "Also known as visceral leishmaniasis, a parasitic disease transmitted by sandflies."
+  },
+  {
+    "name": "Japanese Encephalitis",
+    "description": "A viral brain infection spread by mosquitoes, prevalent in rural areas."
+  },
+  {
+    "name": "Rabies",
+    "description": "A fatal viral disease transmitted through animal bites, affecting the central nervous system."
+  },
+  {
+    "name": "Swine Flu",
+    "description": "An influenza virus strain that originated in pigs and can infect humans."
+  },
+  {
+    "name": "Bird Flu",
+    "description": "An avian influenza virus that can infect humans, leading to severe respiratory illness."
+  },
+  {
+    "name": "COVID-19",
+    "description": "A respiratory illness caused by the novel coronavirus SARS-CoV-2."
+  },
+  {
+    "name": "Cholera",
+    "description": "An acute diarrheal illness caused by ingestion of contaminated water or food."
+  },
+  {
+    "name": "Diarrheal Diseases",
+    "description": "Infections causing frequent, watery bowel movements, leading to dehydration."
+  },
+  {
+    "name": "Pneumonia",
+    "description": "An infection that inflames the air sacs in one or both lungs."
+  },
+  {
+    "name": "Bronchitis",
+    "description": "Inflammation of the bronchial tubes, often causing coughing and mucus production."
+  },
+  {
+    "name": "Asthma",
+    "description": "A chronic respiratory condition characterized by airway inflammation and constriction."
+  },
+  {
+    "name": "Chronic Obstructive Pulmonary Disease",
+    "description": "A group of lung diseases that block airflow and make breathing difficult."
+  },
+  {
+    "name": "Hypertension",
+    "description": "A condition where the blood pressure in the arteries is persistently elevated."
+  },
+  {
+    "name": "Coronary Artery Disease",
+    "description": "A disease caused by the buildup of plaque in the coronary arteries."
+  },
+  {
+    "name": "Stroke",
+    "description": "A medical emergency where blood flow to the brain is interrupted."
+  },
+  {
+    "name": "Diabetes Mellitus Type 1",
+    "description": "An autoimmune condition where the pancreas produces little or no insulin."
+  },
+  {
+    "name": "Diabetes Mellitus Type 2",
+    "description": "A chronic condition affecting the way the body processes blood sugar."
+  },
+  {
+    "name": "Obesity",
+    "description": "A condition characterized by excessive body fat increasing health risks."
+  },
+  {
+    "name": "Anemia",
+    "description": "A condition where there's a lack of healthy red blood cells to carry oxygen."
+  },
+  {
+    "name": "Thalassemia",
+    "description": "A genetic blood disorder causing the body to produce abnormal hemoglobin."
+  },
+  {
+    "name": "Sickle Cell Disease",
+    "description": "A group of inherited red blood cell disorders affecting hemoglobin."
+  },
+  {
+    "name": "Cervical Cancer",
+    "description": "A malignant tumor of the cervix, often caused by HPV infection."
+  },
+  {
+    "name": "Breast Cancer",
+    "description": "A cancer that forms in the cells of the breasts."
+  },
+  {
+    "name": "Oral Cancer",
+    "description": "Cancer that develops in the tissues of the mouth or throat."
+  },
+  {
+    "name": "Lung Cancer",
+    "description": "A type of cancer that begins in the lungs, often linked to smoking."
+  },
+  {
+    "name": "Prostate Cancer",
+    "description": "Cancer occurring in the prostate gland of men."
+  },
+  {
+    "name": "Skin Cancer",
+    "description": "A cancer that forms in the tissues of the skin."
+  },
+  {
+    "name": "Liver Cancer",
+    "description": "A cancer that begins in the cells of the liver."
+  },
+  {
+    "name": "Kidney Disease",
+    "description": "A condition where the kidneys lose the ability to function properly."
+  },
+  {
+    "name": "Urinary Tract Infection",
+    "description": "An infection in any part of the urinary system."
+  },
+  {
+    "name": "Gastroenteritis",
+    "description": "An intestinal infection marked by diarrhea, cramps, nausea, and vomiting."
+  },
+  {
+    "name": "Peptic Ulcer Disease",
+    "description": "Sores that develop on the lining of the stomach or small intestine."
+  },
+  {
+    "name": "Gallstones",
+    "description": "Hardened deposits in the gallbladder causing pain and digestive issues."
+  },
+  {
+    "name": "Appendicitis",
+    "description": "Inflammation of the appendix, often requiring surgical removal."
+  },
+  {
+    "name": "Pancreatitis",
+    "description": "Inflammation of the pancreas, causing abdominal pain and digestive problems."
+  },
+   {
+    "name": "Hernia",
+    "description": "A condition where an organ pushes through the muscle or tissue holding it in place."
+  },
+  {
+    "name": "Rheumatoid Arthritis",
+    "description": "An autoimmune disease causing inflammation in the joints."
+  },
+  {
+    "name": "Osteoarthritis",
+    "description": "A degenerative joint disease affecting cartilage and bones."
+  },
+  {
+    "name": "Gout",
+    "description": "A form of arthritis characterized by severe pain and tenderness in joints."
+  },
+  {
+    "name": "Lupus",
+    "description": "A chronic autoimmune disease that can damage any part of the body."
+  },
+  {
+    "name": "Psoriasis",
+    "description": "A skin disease causing red, itchy scaly patches, often on the knees, elbows, and scalp."
+  },
+  {
+    "name": "Eczema",
+    "description": "An inflammatory skin condition causing redness, itching, and blisters."
+  },
+  {
+    "name": "Vitiligo",
+    "description": "A condition in which the skin loses melanin, resulting in white patches."
+  },
+  {
+    "name": "Scabies",
+    "description": "A contagious skin infestation caused by tiny mites burrowing into the skin."
+  },
+  {
+    "name": "Ringworm",
+    "description": "A fungal infection of the skin causing a red, circular rash with clearer skin in the middle."
+  },
+  {
+    "name": "Conjunctivitis",
+    "description": "An eye infection causing redness, swelling, and discharge from the eyes."
+  },
+  {
+    "name": "Cataract",
+    "description": "A clouding of the eye's natural lens, affecting vision."
+  },
+  {
+    "name": "Glaucoma",
+    "description": "A group of eye diseases causing optic nerve damage and vision loss."
+  },
+  {
+    "name": "Migraine",
+    "description": "A neurological condition causing intense headaches and sensory disturbances."
+  },
+  {
+    "name": "Epilepsy",
+    "description": "A central nervous system disorder marked by abnormal brain activity and seizures."
+  },
+  {
+    "name": "Parkinson's Disease",
+    "description": "A progressive nervous system disorder affecting movement and coordination."
+  },
+  {
+    "name": "Alzheimer's Disease",
+    "description": "A progressive brain disorder causing memory loss and cognitive decline."
+  },
+  {
+    "name": "Depression",
+    "description": "A common mental disorder affecting mood, thoughts, and behavior."
+  },
+  {
+    "name": "Anxiety Disorders",
+    "description": "Mental health conditions marked by excessive worry and fear."
+  },
+  {
+    "name": "Bipolar Disorder",
+    "description": "A mental illness causing extreme mood swings, including emotional highs and lows."
+  },
+  {
+    "name": "Schizophrenia",
+    "description": "A severe mental disorder affecting a person’s thoughts, feelings, and behavior."
+  },
+  {
+    "name": "Autism Spectrum Disorder",
+    "description": "A developmental disorder affecting communication and behavior."
+  },
+  {
+    "name": "ADHD",
+    "description": "A neurodevelopmental disorder marked by inattention, hyperactivity, and impulsivity."
+  },
+  {
+    "name": "Polio",
+    "description": "A viral disease that may cause paralysis and muscle weakness."
+  },
+  {
+    "name": "Measles",
+    "description": "A highly contagious viral disease with symptoms like fever and skin rash."
+  },
+  {
+    "name": "Mumps",
+    "description": "A viral infection causing swelling in the salivary glands."
+  },
+  {
+    "name": "Rubella",
+    "description": "A contagious viral infection preventable by vaccine, also known as German measles."
+  },
+  {
+    "name": "Tetanus",
+    "description": "A bacterial infection causing muscle stiffness and spasms."
+  },
+  {
+    "name": "Whooping Cough",
+    "description": "A contagious bacterial infection causing severe coughing fits."
+  },
+  {
+    "name": "H1N1 Influenza",
+    "description": "A strain of influenza virus that caused a global pandemic in 2009."
+  },
+  {
+    "name": "Zika Virus Infection",
+    "description": "A mosquito-borne virus that can cause birth defects if contracted during pregnancy."
+  },
+  {
+    "name": "Filariasis",
+    "description": "A parasitic disease transmitted by mosquitoes causing swelling of limbs."
+  },
+  {
+    "name": "Toxoplasmosis",
+    "description": "An infection caused by a parasite, often contracted from undercooked meat or cat feces."
+  },
+  {
+    "name": "Typhus",
+    "description": "A bacterial disease spread by lice or fleas, causing fever and rash."
+  },
+  {
+    "name": "Brucellosis",
+    "description": "A bacterial infection transmitted from animals to humans through unpasteurized dairy."
+  },
+  {
+    "name": "Scrub Typhus",
+    "description": "A disease caused by bacteria spread through mite bites, common in rural areas."
+  },
+  {
+    "name": "Hantavirus",
+    "description": "A virus spread by rodents causing severe respiratory disease in humans."
+  },
+  {
+    "name": "Hydatid Disease",
+    "description": "A parasitic infection caused by tapeworms, commonly affecting liver and lungs."
+  },
+  {
+    "name": "Ascariasis",
+    "description": "A parasitic worm infection of the small intestine, prevalent in poor sanitation areas."
+  },
+  {
+    "name": "Hookworm Infection",
+    "description": "A parasitic infection causing blood loss and anemia, common in tropical regions."
+  },
+  {
+    "name": "Tapeworm Infection",
+    "description": "A parasitic infection caused by ingesting tapeworm larvae or eggs."
+  },
+  {
+    "name": "Giardiasis",
+    "description": "A diarrheal disease caused by a microscopic parasite."
+  },
+  {
+    "name": "Scurvy",
+    "description": "A vitamin C deficiency disease causing weakness and gum disease."
+  },
+  {
+    "name": "Rickets",
+    "description": "A childhood bone disorder caused by vitamin D deficiency."
+  },
+  {
+    "name": "Goiter",
+    "description": "An abnormal enlargement of the thyroid gland often due to iodine deficiency."
+  },
+  {
+    "name": "Beriberi",
+    "description": "A disease caused by thiamine (vitamin B1) deficiency, affecting the nervous system."
+  }
+]
+ 

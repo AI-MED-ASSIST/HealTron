@@ -50,3 +50,28 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Delete a Medical Condition from User Profile
+exports.deleteMedicalCondition = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { condition } = req.body;
+    if (!condition)
+      return res.status(400).json({ error: "Missing medical condition" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Remove condition from the medicalConditions array
+    user.medicalConditions = user.medicalConditions.filter(
+      (c) => c !== condition
+    );
+    await user.save();
+    res
+      .status(200)
+      .json({ message: "Medical condition deleted successfully", user });
+  } catch (error) {
+    console.error("Error deleting medical condition:", error);
+    res.status(500).json({ error: error.message });
+  }
+};

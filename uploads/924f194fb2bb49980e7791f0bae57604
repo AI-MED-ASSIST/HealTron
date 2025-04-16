@@ -1,0 +1,403 @@
+[
+  {
+    "name": "Hepatitis E",
+    "description": "A liver disease caused by the hepatitis E virus, commonly transmitted through contaminated water."
+  },
+  {
+    "name": "Hepatitis D",
+    "description": "A liver infection that occurs only in people infected with hepatitis B virus."
+  },
+  {
+    "name": "Norovirus Infection",
+    "description": "A contagious virus causing vomiting and diarrhea, often linked to contaminated food or water."
+  },
+  {
+    "name": "Hand, Foot and Mouth Disease",
+    "description": "A common viral illness affecting children with sores in the mouth and rash on hands and feet."
+  },
+  {
+    "name": "Tularaemia",
+    "description": "A rare infectious disease spread by animals and insects, causing fever and skin ulcers."
+  },
+  {
+    "name": "Q Fever",
+    "description": "A bacterial infection caused by Coxiella burnetii, often spread from animals to humans."
+  },
+  {
+    "name": "Nipah Virus Infection",
+    "description": "A zoonotic virus causing respiratory issues and brain inflammation with a high fatality rate."
+  },
+  {
+    "name": "Crimean-Congo Hemorrhagic Fever",
+    "description": "A tick-borne viral disease causing severe hemorrhagic symptoms."
+  },
+  {
+    "name": "Actinomycosis",
+    "description": "A rare bacterial infection that causes abscesses in the mouth, lungs, or digestive organs."
+  },
+  {
+    "name": "Leptospirosis",
+    "description": "A bacterial disease spread through the urine of infected animals, especially in flood-prone areas."
+  },
+  {
+    "name": "Strongyloidiasis",
+    "description": "A parasitic infection caused by roundworms found in contaminated soil."
+  },
+  {
+    "name": "Onchocerciasis",
+    "description": "Also known as river blindness, caused by a parasitic worm transmitted by blackflies."
+  },
+  {
+    "name": "Trichuriasis",
+    "description": "An intestinal infection caused by the whipworm, common in tropical areas."
+  },
+  {
+    "name": "Entamoeba Histolytica Infection",
+    "description": "A parasitic infection of the intestines, causing diarrhea and liver abscesses."
+  },
+  {
+    "name": "Amebiasis",
+    "description": "A protozoan infection causing diarrhea and colitis, spread through contaminated food or water."
+  },
+  {
+    "name": "Cholangitis",
+    "description": "Inflammation of the bile duct system, usually caused by a bacterial infection."
+  },
+  {
+    "name": "Oral Candidiasis",
+    "description": "A fungal infection in the mouth caused by Candida species, also known as oral thrush."
+  },
+  {
+    "name": "Tinea Versicolor",
+    "description": "A fungal skin condition that causes discolored patches on the skin."
+  },
+  {
+    "name": "Coccidioidomycosis",
+    "description": "A fungal infection also known as Valley fever, rare in India but imported via travel."
+  },
+  {
+    "name": "Mycetoma",
+    "description": "A chronic granulomatous infection of the skin and subcutaneous tissues caused by fungi or bacteria."
+  },
+  {
+    "name": "Laryngitis",
+    "description": "Inflammation of the voice box due to infection, overuse, or irritation."
+  },
+  {
+    "name": "Otitis Media",
+    "description": "A middle ear infection causing ear pain and hearing issues, common in children."
+  },
+  {
+    "name": "Sinusitis",
+    "description": "Inflammation or infection of the sinus cavities, causing facial pain and congestion."
+  },
+  {
+    "name": "Barrett’s Esophagus",
+    "description": "A condition where the esophageal lining changes, sometimes leading to esophageal cancer."
+  },
+  {
+    "name": "Esophageal Varices",
+    "description": "Swollen veins in the esophagus, usually due to liver disease, which can rupture and bleed."
+  },
+  {
+    "name": "Hemophilia",
+    "description": "A genetic bleeding disorder where blood doesn’t clot properly due to missing clotting factors."
+  },
+  {
+    "name": "Idiopathic Thrombocytopenic Purpura (ITP)",
+    "description": "An autoimmune condition leading to low platelet counts and bleeding."
+  },
+  {
+    "name": "Thrombophilia",
+    "description": "A condition where the blood has an increased tendency to clot."
+  },
+  {
+    "name": "Paget’s Disease of Bone",
+    "description": "A chronic bone disorder causing bones to become enlarged and deformed."
+  },
+  {
+    "name": "Hyperparathyroidism",
+    "description": "Excessive secretion of parathyroid hormone leading to high calcium levels and bone issues."
+  },
+  {
+    "name": "Cushing’s Syndrome",
+    "description": "A hormonal disorder caused by high levels of cortisol in the body."
+  },
+  {
+    "name": "Addison’s Disease",
+    "description": "A rare disorder where adrenal glands don’t produce enough hormones."
+  },
+  {
+    "name": "Acromegaly",
+    "description": "A hormonal disorder where excess growth hormone causes abnormal growth of bones and tissues."
+  },
+  {
+    "name": "Hirschsprung’s Disease",
+    "description": "A congenital condition causing bowel obstruction due to missing nerve cells in the colon."
+  },
+  {
+    "name": "Wilson’s Disease",
+    "description": "A rare genetic disorder causing copper buildup in organs, especially the liver and brain."
+  },
+  {
+    "name": "Turner Syndrome",
+    "description": "A genetic disorder affecting females, characterized by short stature and ovarian dysfunction."
+  },
+  {
+    "name": "Klinefelter Syndrome",
+    "description": "A genetic condition in males caused by an extra X chromosome, affecting development."
+  },
+  {
+    "name": "Tourette Syndrome",
+    "description": "A neurological disorder characterized by repetitive involuntary movements and vocalizations."
+  },
+  {
+    "name": "Marfan Syndrome",
+    "description": "A genetic disorder affecting connective tissue, often involving the heart, eyes, and skeleton."
+  },
+  {
+    "name": "Ehlers-Danlos Syndrome",
+    "description": "A group of genetic disorders affecting connective tissues, causing hyperflexibility and fragile skin."
+  },
+  {
+    "name": "Systemic Sclerosis",
+    "description": "An autoimmune disease causing hardening and tightening of the skin and connective tissues."
+  },
+  {
+    "name": "Sjogren’s Syndrome",
+    "description": "An autoimmune disorder affecting moisture-producing glands, causing dry eyes and mouth."
+  },
+  {
+    "name": "Interstitial Lung Disease",
+    "description": "A group of disorders causing progressive scarring of lung tissue, affecting breathing."
+  },
+  {
+    "name": "Bronchiectasis",
+    "description": "A chronic condition where the walls of the bronchi are thickened due to inflammation and infection."
+  },
+  {
+    "name": "Sarcoidosis",
+    "description": "An inflammatory disease that affects multiple organs, mostly the lungs and lymph glands."
+  },
+  {
+    "name": "Restless Legs Syndrome",
+    "description": "A neurological condition causing an uncontrollable urge to move the legs."
+  },
+  {
+    "name": "Trigeminal Neuralgia",
+    "description": "A chronic pain condition affecting the trigeminal nerve in the face."
+  },
+  {
+    "name": "Tension Headache",
+    "description": "A common type of headache caused by muscle tension, stress, or anxiety."
+  },
+  {
+    "name": "Obstructive Sleep Apnea",
+    "description": "A sleep disorder where breathing repeatedly stops and starts due to throat muscle relaxation."
+  },
+  {
+    "name": "Insomnia",
+    "description": "A sleep disorder characterized by difficulty falling or staying asleep."
+  },
+  {
+    "name": "Epiglottitis",
+    "description": "A life-threatening condition where the epiglottis becomes inflamed and can block airflow."
+  },
+  {
+    "name": "Epilepsy",
+    "description": "A neurological disorder marked by recurrent, unprovoked seizures."
+  },
+  {
+    "name": "Guillain-Barre Syndrome",
+    "description": "A rare neurological disorder where the body’s immune system attacks peripheral nerves."
+  },
+  {
+    "name": "Idiopathic Pulmonary Fibrosis",
+    "description": "A chronic lung disease causing progressive scarring of lung tissue."
+  },
+  {
+    "name": "Nephrotic Syndrome",
+    "description": "A kidney disorder causing excessive protein loss in urine and swelling in the body."
+  },
+  {
+    "name": "Acute Glomerulonephritis",
+    "description": "An inflammatory kidney condition often following streptococcal infections."
+  },
+  {
+    "name": "Hydronephrosis",
+    "description": "Swelling of the kidneys due to urine buildup, often from obstruction or reflux."
+  },
+  {
+    "name": "Renal Calculi",
+    "description": "Also known as kidney stones, they are hard deposits formed in the kidneys."
+  },
+  {
+    "name": "Urethritis",
+    "description": "Inflammation of the urethra, often due to infection."
+  },
+  {
+    "name": "Prostatitis",
+    "description": "Inflammation of the prostate gland, often causing painful urination and pelvic discomfort."
+  },
+  {
+    "name": "Polycystic Ovary Syndrome (PCOS)",
+    "description": "A hormonal disorder causing enlarged ovaries with small cysts on the outer edges."
+  },
+  {
+    "name": "Endometriosis",
+    "description": "A condition where tissue similar to the uterine lining grows outside the uterus."
+  },
+  {
+    "name": "Pelvic Inflammatory Disease (PID)",
+    "description": "An infection of the female reproductive organs, often caused by sexually transmitted bacteria."
+  },
+  {
+    "name": "Ectopic Pregnancy",
+    "description": "A potentially life-threatening condition where a fertilized egg implants outside the uterus."
+  },
+  {
+    "name": "Hyperemesis Gravidarum",
+    "description": "Severe nausea and vomiting during pregnancy leading to dehydration and weight loss."
+  },
+  {
+    "name": "Fibrocystic Breast Changes",
+    "description": "Benign changes in the breast tissue causing lumpiness and discomfort."
+  },
+  {
+    "name": "Mastitis",
+    "description": "Inflammation of breast tissue often associated with breastfeeding."
+  },
+  {
+    "name": "Gynecomastia",
+    "description": "Enlargement of male breast tissue due to hormonal imbalance."
+  },
+  {
+    "name": "Hypothyroidism",
+    "description": "A condition where the thyroid gland doesn’t produce enough thyroid hormones."
+  },
+  {
+    "name": "Hyperthyroidism",
+    "description": "A condition where the thyroid gland produces too much thyroid hormone."
+  },
+  {
+    "name": "Goiter",
+    "description": "An abnormal enlargement of the thyroid gland."
+  },
+  {
+    "name": "Lichen Planus",
+    "description": "An inflammatory skin condition causing purplish, itchy, flat bumps."
+  },
+  {
+    "name": "Psoriatic Arthritis",
+    "description": "A form of arthritis affecting some people with psoriasis, causing joint pain and stiffness."
+  },
+  {
+    "name": "Vitiligo",
+    "description": "A condition where the skin loses its pigment cells, leading to white patches."
+  },
+  {
+    "name": "Seborrheic Dermatitis",
+    "description": "A common skin condition causing red, scaly, itchy patches, often on the scalp."
+  },
+  {
+    "name": "Rosacea",
+    "description": "A chronic skin condition causing redness, swelling, and pimples on the face."
+  },
+  {
+    "name": "Urticaria",
+    "description": "Also known as hives, it's a skin reaction causing itchy welts."
+  },
+  {
+    "name": "Eczema",
+    "description": "A condition that makes the skin red, inflamed, and itchy."
+  },
+  {
+    "name": "Alopecia Areata",
+    "description": "An autoimmune condition causing patchy hair loss on the scalp and body."
+  },
+  {
+    "name": "Scabies",
+    "description": "A skin infestation caused by a microscopic mite that burrows into the skin."
+  },
+  {
+    "name": "Pediculosis Capitis",
+    "description": "An infestation of head lice, common in school-age children."
+  },
+  {
+    "name": "Mumps",
+    "description": "A viral infection causing swollen salivary glands, fever, and muscle pain."
+  },
+  {
+    "name": "Rubella",
+    "description": "Also known as German measles, it causes a red rash and mild fever."
+  },
+  {
+    "name": "Pertussis",
+    "description": "Also known as whooping cough, it’s a contagious respiratory disease."
+  },
+  {
+    "name": "Rickettsial Infection",
+    "description": "A group of bacterial infections transmitted by lice, fleas, ticks, or mites."
+  },
+  {
+    "name": "Histoplasmosis",
+    "description": "A fungal infection from inhaling spores, often linked to bird or bat droppings."
+  },
+  {
+    "name": "Toxoplasmosis",
+    "description": "A parasitic infection often transmitted through undercooked meat or cat feces."
+  },
+  {
+    "name": "Cryptosporidiosis",
+    "description": "A diarrheal disease caused by microscopic parasites in contaminated water."
+  },
+  {
+    "name": "Giardiasis",
+    "description": "An intestinal infection caused by the parasite Giardia lamblia."
+  },
+  {
+    "name": "Brucellosis",
+    "description": "A bacterial infection spread from animals to humans through unpasteurized dairy or contact."
+  },
+  {
+    "name": "Typhus",
+    "description": "A group of infectious diseases spread by lice, fleas, or mites."
+  },
+  {
+    "name": "Pellagra",
+    "description": "A nutritional disorder caused by niacin (vitamin B3) deficiency, leading to diarrhea, dermatitis, and dementia."
+  },
+  {
+    "name": "Kwashiorkor",
+    "description": "A severe form of malnutrition caused by protein deficiency, common in children."
+  },
+  {
+    "name": "Marasmus",
+    "description": "A severe form of malnutrition caused by energy deficiency."
+  },
+  {
+    "name": "Ankylosing Spondylitis",
+    "description": "A type of arthritis affecting the spine and large joints."
+  },
+  {
+    "name": "Osteomyelitis",
+    "description": "An infection in the bone, often caused by bacteria."
+  },
+  {
+    "name": "Tendinitis",
+    "description": "Inflammation of a tendon, usually due to overuse or injury."
+  },
+  {
+    "name": "Plantar Fasciitis",
+    "description": "A common cause of heel pain due to inflammation of the plantar fascia."
+  },
+  {
+    "name": "Bursitis",
+    "description": "Inflammation of the fluid-filled sacs (bursae) that cushion joints."
+  },
+  {
+    "name": "Sciatica",
+    "description": "Pain radiating along the sciatic nerve, usually due to a herniated disk."
+  }
+]
+

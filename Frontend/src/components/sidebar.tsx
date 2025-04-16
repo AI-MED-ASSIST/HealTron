@@ -28,7 +28,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
       {/* Profile Info */}
       <div className="flex flex-col items-center mb-8">
         <img
-          src={user?.profilePic || "/default-profile.png"}
+          src={
+            user?.profilePic ||
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcQg-lr5__zRqY3mRg6erzAD9n4BGp3G8VfA&s"
+          }
           alt="Profile"
           className="w-20 h-20 rounded-full object-cover mb-2"
         />
