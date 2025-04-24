@@ -66,11 +66,11 @@ const MedicalConditionPage: React.FC = () => {
             </div>
           ) : (
             // Using grid to show a maximum of 4 tags per row on large screens
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            <div className="flex flex-wrap gap-2">
               {medicalConditions.map((condition, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between bg-gray-700 px-3 py-1 rounded-full"
+                  className="flex flex-nowrap items-center justify-evenly bg-gray-700 px-3 py-1 rounded-full"
                 >
                   <span className="mr-2">{condition}</span>
                   <button

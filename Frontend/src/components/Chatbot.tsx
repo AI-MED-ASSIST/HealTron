@@ -239,6 +239,7 @@ As AI-med Assist, please answer the following question if it is related to eithe
               type="text"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage(userInput)}
               placeholder="Type your message..."
               className="flex-1 p-2 rounded-lg text-gray-900 focus:outline-none"
               disabled={isSending}
@@ -292,7 +293,7 @@ As AI-med Assist, please answer the following question if it is related to eithe
                       msg.sender === "user" ? "text-blue-400" : "text-gray-400"
                     }`}
                   >
-                    {msg.text}
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
                   </p>
                 ))}
               </div>

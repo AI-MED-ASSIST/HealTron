@@ -18,4 +18,7 @@ router.delete(
   userController.deleteMedicalCondition
 );
 
+// Add medical condition
+router.put("/:id/medical-conditions", userController.addMedicalCondition);
+
 module.exports = router;

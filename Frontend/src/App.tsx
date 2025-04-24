@@ -29,6 +29,8 @@ import Sidebar from "./components/sidebar";
 import { AuthProvider } from "./context/AuthContext";
 import MedicalConditionPage from "./pages/MedicalConditionPage";
 
+import SymptomCheckerPage from "./pages/SymptomCheckerPage";
+
 // PrivateRoute: if not authenticated, redirect to /login
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -88,6 +90,10 @@ function App() {
                       <Route
                         path="/medical"
                         element={<MedicalConditionPage />}
+                      />
+                      <Route
+                        path="/symptom-checker"
+                        element={<SymptomCheckerPage />}
                       />
                     </Routes>
                     <Chatbot />

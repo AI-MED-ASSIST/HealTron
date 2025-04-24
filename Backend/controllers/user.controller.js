@@ -75,3 +75,29 @@ exports.deleteMedicalCondition = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.addMedicalCondition = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { condition } = req.body;
+    if (!condition) {
+      return res.status(400).json({ error: "No condition provided" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Append only if not already present
+    if (!user.medicalConditions.includes(condition)) {
+      user.medicalConditions.push(condition);
+      await user.save();
+    }
+
+    return res.json({ medicalConditions: user.medicalConditions });
+  } catch (err) {
+    console.error("addMedicalCondition error:", err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
