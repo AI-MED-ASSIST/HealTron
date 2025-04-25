@@ -176,11 +176,5 @@ def delete_prediction(prediction_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-print("→ Connecting to:", MONGO_URI)
-print("→ Database name:", DB_NAME)
-print("→ Actual DB client address:", mongo.address)
-print("→ Collections right now:", db.list_collection_names())
-
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=PORT, debug=True)
