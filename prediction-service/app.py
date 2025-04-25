@@ -1,3 +1,4 @@
+from bson.objectid import ObjectId
 import os
 import re
 import json
@@ -95,7 +96,7 @@ def predict():
             ai_prompt = (
                 f"Based solely on the symptoms {sorted(user_syms)}, predict the most likely disease. "
                 "Do not respond with 'Unknown'; match the best possible disease. "
-                "Provide an accuracy percentage (within 0-1)for the prediction, and then offer relevant medical advice. "
+                "Provide an accuracy percentage (within 0.8-1)for the prediction, and then offer relevant medical advice. "
                 "Respond strictly in the following JSON format:\n"
                 "{\n"
                 '  "predictedDisease": "Disease Name",\n'
@@ -139,6 +140,42 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": f"Prediction error: {e}"}), 500
+
+
+@app.route("/api/predictions/<user_id>", methods=["GET"])
+def get_prediction_history(user_id):
+    try:
+        # fetch and sort descending by createdAt
+        docs = list(
+            predictions_col.find({"userId": user_id})
+            .sort("createdAt", -1)
+        )
+        # convert to JSON‐serializable
+        preds = []
+        for d in docs:
+                preds.append({
+                "id": str(d["_id"]),                         # <— include id
+                "disease": d["predictedDisease"],
+                "accuracy": d["accuracy"],
+                "recommendation": d["recommendation"],
+                "timestamp": d["createdAt"].isoformat()
+            })
+        return jsonify({"predictions": preds})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/predictions/<prediction_id>", methods=["DELETE"])
+def delete_prediction(prediction_id):
+    try:
+        oid = ObjectId(prediction_id)             # ← requires bson.objectid.ObjectId
+        result = predictions_col.delete_one({"_id": oid})
+        if result.deleted_count == 1:
+            return jsonify({"success": True})
+        return jsonify({"error": "Not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=PORT, debug=True)

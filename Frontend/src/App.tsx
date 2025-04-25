@@ -30,6 +30,7 @@ import { AuthProvider } from "./context/AuthContext";
 import MedicalConditionPage from "./pages/MedicalConditionPage";
 
 import SymptomCheckerPage from "./pages/SymptomCheckerPage";
+import ViewPreviousHistory from "./pages/ViewPreviousHistory";
 
 // PrivateRoute: if not authenticated, redirect to /login
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -94,6 +95,10 @@ function App() {
                       <Route
                         path="/symptom-checker"
                         element={<SymptomCheckerPage />}
+                      />
+                      <Route
+                        path="/history"
+                        element={<ViewPreviousHistory />}
                       />
                     </Routes>
                     <Chatbot />
