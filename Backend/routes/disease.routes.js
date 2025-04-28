@@ -1,19 +1,18 @@
 // backend/routes/disease.routes.js
 const express = require("express");
-const router = express.Router();
 const multer = require("multer");
 const {
   getDiseases,
   uploadDiseases,
-} = require("../controllers/disease.controller");
+} = require("../controllers/disease.controller.js");
 
-// Configure multer for file uploads. Files will be stored temporarily in 'uploads/' folder.
+const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
-// GET diseases (existing endpoint)
+// GET /api/diseases?q=foo
 router.get("/", getDiseases);
 
-// POST /upload: Upload a JSON file containing disease dataset
+// POST /api/diseases/upload  (form-field name “file”)
 router.post("/upload", upload.single("file"), uploadDiseases);
 
 module.exports = router;
