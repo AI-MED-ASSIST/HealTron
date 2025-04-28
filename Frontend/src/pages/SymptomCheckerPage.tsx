@@ -11,7 +11,7 @@ import ReactMarkdown from "react-markdown";
 const steps = ["User Details", "Select Symptoms", "Results"] as const;
 
 const SymptomCheckerPage: React.FC = () => {
-  const { user, login } = useAuth(); // assume AuthContext provides setUser
+  const { user, login } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [agreed, setAgreed] = useState(false);
@@ -25,6 +25,10 @@ const SymptomCheckerPage: React.FC = () => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Helper to display nulls as the string "null"
+  const display = (val: any) =>
+    val === null || val === undefined ? "null" : val;
 
   // Load symptom list
   useEffect(() => {
@@ -86,7 +90,6 @@ const SymptomCheckerPage: React.FC = () => {
         user!._id,
         prediction.disease
       );
-      // Update context so Nav/Profile shows new condition
       login({ ...user!, medicalConditions: updatedConditions });
       alert("Added to medical conditions!");
     } catch (e: any) {
@@ -104,23 +107,25 @@ const SymptomCheckerPage: React.FC = () => {
             <h2 className="text-2xl font-bold">Your Profile</h2>
             <ul className="space-y-1">
               <li>
-                <strong>Username:</strong> {user?.username}
+                <strong>Username:</strong> {display(user?.username)}
               </li>
               <li>
-                <strong>Age:</strong> {user?.age}
+                <strong>Age:</strong> {display(user?.age)}
               </li>
               <li>
-                <strong>Gender:</strong> {user?.gender}
+                <strong>Gender:</strong> {display(user?.gender)}
               </li>
               <li>
-                <strong>Height:</strong> {user?.height} cm
+                <strong>Height:</strong> {display(user?.height)} cm
               </li>
               <li>
-                <strong>Weight:</strong> {user?.weight} kg
+                <strong>Weight:</strong> {display(user?.weight)} kg
               </li>
               <li>
                 <strong>Medical Conditions:</strong>{" "}
-                {user?.medicalConditions.length
+                {user?.medicalConditions === null
+                  ? "null"
+                  : user?.medicalConditions?.length
                   ? user.medicalConditions.join(", ")
                   : "None"}
               </li>
@@ -226,7 +231,6 @@ const SymptomCheckerPage: React.FC = () => {
                     <ReactMarkdown>{prediction.recommendation}</ReactMarkdown>
                   </span>
                 </div>
-                {/* ← New Add button below */}
                 <button
                   onClick={handleAddCondition}
                   disabled={loading}
