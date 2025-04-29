@@ -1,3 +1,4 @@
+// frontend/src/modals/ConfirmSaveModal.tsx
 import React from "react";
 
 interface ConfirmSaveModalProps {
@@ -19,13 +20,13 @@ const ConfirmSaveModal: React.FC<ConfirmSaveModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6">
+      <div className="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-black">
         <h3 className="text-lg font-semibold mb-4">{title}</h3>
         <p className="mb-6">{message}</p>
         <div className="flex justify-end space-x-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-red-600 hover:text-white"
           >
             Cancel
           </button>

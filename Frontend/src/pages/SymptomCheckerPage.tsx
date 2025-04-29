@@ -7,12 +7,14 @@ import { predictDisease } from "../services/predictService";
 import { addMedicalCondition } from "../services/userService";
 import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
+import ConfirmSaveModal from "../modals/ConfirmSaveModal";
 
 const steps = ["User Details", "Select Symptoms", "Results"] as const;
 
 const SymptomCheckerPage: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [agreed, setAgreed] = useState(false);
   const [symptoms, setSymptoms] = useState<string[]>([]);
@@ -25,6 +27,7 @@ const SymptomCheckerPage: React.FC = () => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showConfirmSaveModal, setShowConfirmSaveModal] = useState(false);
 
   // Helper to display nulls as the string "null"
   const display = (val: any) =>
@@ -91,9 +94,9 @@ const SymptomCheckerPage: React.FC = () => {
         prediction.disease
       );
       login({ ...user!, medicalConditions: updatedConditions });
-      alert("Added to medical conditions!");
     } catch (e: any) {
-      alert(e.message);
+      console.error(e);
+      setError(e.message || "Failed to add condition");
     } finally {
       setLoading(false);
     }
@@ -232,7 +235,7 @@ const SymptomCheckerPage: React.FC = () => {
                   </span>
                 </div>
                 <button
-                  onClick={handleAddCondition}
+                  onClick={() => setShowConfirmSaveModal(true)}
                   disabled={loading}
                   className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
                 >
@@ -323,6 +326,18 @@ const SymptomCheckerPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Confirm Save Modal */}
+      <ConfirmSaveModal
+        isOpen={showConfirmSaveModal}
+        title="Confirm Add"
+        message={`Add "${prediction?.disease}" to your medical conditions?`}
+        onConfirm={() => {
+          setShowConfirmSaveModal(false);
+          handleAddCondition();
+        }}
+        onCancel={() => setShowConfirmSaveModal(false)}
+      />
     </div>
   );
 };

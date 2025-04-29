@@ -51,7 +51,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
           onClick={onClose}
           className="text-blue-400 hover:underline"
         >
-          View Previous History
+          View Symptom Checker History
+        </Link>
+        <Link
+          to="/disease-pred"
+          onClick={onClose}
+          className="text-blue-400 hover:underline"
+        >
+          View Disease Prediction History
         </Link>
         <Link
           to="/medical"

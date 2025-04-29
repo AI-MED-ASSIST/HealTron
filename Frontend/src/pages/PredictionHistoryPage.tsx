@@ -61,7 +61,9 @@ const PredictionHistoryPage: React.FC = () => {
         >
           &larr; Back
         </button>
-        <h1 className="text-3xl font-bold text-center">Prediction History</h1>
+        <h1 className="text-3xl font-bold text-center">
+          Disease Prediction History
+        </h1>
       </div>
 
       {loading ? (

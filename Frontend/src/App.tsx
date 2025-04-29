@@ -102,7 +102,6 @@ function App() {
                         path="/history"
                         element={<ViewPreviousHistory />}
                       />
-
                       <Route
                         path="/disease-pred"
                         element={<PredictionHistoryPage />}

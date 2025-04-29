@@ -8,6 +8,7 @@ import {
 } from "../services/predictHistoryService";
 import { FaSpinner, FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa";
 import ConfirmModal from "../modals/ConfirmModal";
+import { useNavigate } from "react-router-dom";
 
 const ViewPreviousHistory: React.FC = () => {
   const { user } = useAuth();
@@ -16,6 +17,7 @@ const ViewPreviousHistory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [confirmIdx, setConfirmIdx] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -46,8 +48,16 @@ const ViewPreviousHistory: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 pt-20 px-6">
-      <h1 className="text-3xl font-bold mb-6">Previous Symptom Checks</h1>
+    <div className="relative min-h-screen bg-gray-900 text-gray-100 pt-20 px-6">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute left-8 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+      >
+        &larr; Back
+      </button>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Previous Symptom Checks
+      </h1>
 
       {/* Confirmation Modal */}
       <ConfirmModal

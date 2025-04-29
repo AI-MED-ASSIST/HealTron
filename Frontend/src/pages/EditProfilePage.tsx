@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProfile, updateProfile } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import MedicalHistoryModal from "../modals/MedicalHistoryModal";
+import { FaArrowLeft } from "react-icons/fa";
 
 const EditProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // id can be 'new' or an existing user id
@@ -66,7 +67,15 @@ const EditProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="container p-6 text-white bg-gray-900 min-h-screen flex flex-col items-center justify-center min-w-full pt-20">
+    <div className="relative container p-6 text-white bg-gray-900 min-h-screen flex flex-col items-center justify-center min-w-full pt-20">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-20 left-28 flex items-center text-gray-300 hover:text-gray-100"
+      >
+        <FaArrowLeft className="mr-2" />
+        Back
+      </button>
+
       <h1 className="text-3xl mb-6 font-bold text-center">
         {id === "new" ? "Complete Your Profile" : "Edit Profile"}
       </h1>
