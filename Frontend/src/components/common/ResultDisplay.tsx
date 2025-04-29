@@ -47,13 +47,13 @@ const ResultDisplay: React.FC<Props> = ({ result }) => {
   };
 
   return (
-    <div className="relative p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto">
+    <div className="relative p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto pt-20">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 text-blue-600 hover:text-blue-800"
+        className="absolute top-20 left-4 text-blue-600 hover:text-blue-800"
       >
-        &larr; Back
+        ⬅️ Back
       </button>
 
       {/* Title */}
