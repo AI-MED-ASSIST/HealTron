@@ -1,91 +1,178 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/models/HeartModel.tsx
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import Loader from "../common/Loader";
+import ResultDisplay from "../common/ResultDisplay";
 
-const HeartModel = () => {
-  const navigate = useNavigate();
+interface Detail {
+  metric: string;
+  value: string | number;
+  status: string;
+  recommendedRange: string | [number, number];
+}
+interface PredictResponse {
+  probability: number;
+  modelAccuracy: number;
+  details: Detail[];
+  recommendation: string;
+}
+
+const HeartModel: React.FC = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    age: '',
-    gender: 'Male',
-    chestPainType: 'Typical Angina',
-    restingBloodPressure: '',
-    serumCholesterol: '',
-    fastingBloodSugar: 'No',
-    restingElectrocardiographicResult: 'Normal',
-    maximumHeartRateAchieved: '',
-    exerciseInducedAngina: 'Yes',
-    stDepression: '',
-    slopeOfPeakExerciseSTSegment: '0'
+    age: "",
+    gender: "Male",
+    chestPainType: "Typical Angina",
+    restingBloodPressure: "",
+    serumCholesterol: "",
+    fastingBloodSugar: "No",
+    restingElectrocardiographicResult: "Normal",
+    maximumHeartRateAchieved: "",
+    exerciseInducedAngina: "Yes",
+    stDepression: "",
+    slopeOfPeakExerciseSTSegment: "0",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<PredictResponse | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const prompt = `You are a medical assistant. Evaluate heart disease risk. Input is JSON with patient metrics. 
+Output MUST be pure JSON with these keys:
+  • probability (0–1),
+  • modelAccuracy (0–1),
+  • details (array of {metric,value,status,recommendedRange}),
+  • recommendation (markdown).
+Here is the input:
+
+${JSON.stringify(formData)}`;
+
+      const res = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user!._id, message: prompt }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { response } = await res.json();
+      const raw = response.match(/\{[\s\S]*\}/)?.[0];
+      if (!raw) throw new Error("Invalid JSON from AI");
+      setResult(JSON.parse(raw));
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) return <Loader />;
+  if (result) return <ResultDisplay result={result} />;
 
   return (
     <div className="min-h-screen pt-20 pb-12 flex justify-center bg-[#f6f9fb]">
       <div className="w-full max-w-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Heart Disease Prediction</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Heart Disease Prediction
+        </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {Object.keys(formData).map((key, idx) => (
-            <div key={idx} className="flex flex-col">
-              <label htmlFor={key} className="text-sm font-medium text-gray-700 mb-1">
-                {key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim()}
+          {Object.entries(formData).map(([key, val]) => (
+            <div key={key} className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700 mb-1">
+                {key
+                  .replace(/_/g, " ")
+                  .replace(/([A-Z])/g, " $1")
+                  .trim()}
               </label>
-              {['gender', 'chestPainType', 'fastingBloodSugar', 'restingElectrocardiographicResult', 'exerciseInducedAngina', 'slopeOfPeakExerciseSTSegment'].includes(key) ? (
+              {[
+                "gender",
+                "chestPainType",
+                "fastingBloodSugar",
+                "restingElectrocardiographicResult",
+                "exerciseInducedAngina",
+                "slopeOfPeakExerciseSTSegment",
+              ].includes(key) ? (
                 <select
-                  id={key}
                   name={key}
-                  value={formData[key]}
+                  value={val}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-black focus:border-black focus:ring-black"
+                  className="w-full p-2 rounded-md border border-black"
                 >
-                  {key === 'gender' && (<><option value="Male">Male</option><option value="Female">Female</option></>)}
-                  {key === 'chestPainType' && (<><option value="Typical Angina">Typical Angina</option><option value="Atypical Angina">Atypical Angina</option><option value="Non-Anginal Pain">Non-Anginal Pain</option><option value="Asymptomatic">Asymptomatic</option></>)}
-                  {key === 'fastingBloodSugar' && (<><option value="No">No</option><option value="Yes">Yes</option></>)}
-                  {key === 'restingElectrocardiographicResult' && (<><option value="Normal">Normal</option><option value="ST-T Wave Abnormality">ST-T Wave Abnormality</option><option value="Left Ventricular Hypertrophy">Left Ventricular Hypertrophy</option></>)}
-                  {key === 'exerciseInducedAngina' && (<><option value="No">No</option><option value="Yes">Yes</option></>)}
-                  {key === 'slopeOfPeakExerciseSTSegment' && (<><option value="0">0</option><option value="1">1</option><option value="2">2</option></>)}
+                  {key === "gender" && (
+                    <>
+                      <option>Male</option>
+                      <option>Female</option>
+                    </>
+                  )}
+                  {key === "chestPainType" && (
+                    <>
+                      <option>Typical Angina</option>
+                      <option>Atypical Angina</option>
+                      <option>Non-Anginal Pain</option>
+                      <option>Asymptomatic</option>
+                    </>
+                  )}
+                  {key === "fastingBloodSugar" && (
+                    <>
+                      <option>No</option>
+                      <option>Yes</option>
+                    </>
+                  )}
+                  {key === "restingElectrocardiographicResult" && (
+                    <>
+                      <option>Normal</option>
+                      <option>ST-T Wave Abnormality</option>
+                      <option>Left Ventricular Hypertrophy</option>
+                    </>
+                  )}
+                  {key === "exerciseInducedAngina" && (
+                    <>
+                      <option>Yes</option>
+                      <option>No</option>
+                    </>
+                  )}
+                  {key === "slopeOfPeakExerciseSTSegment" && (
+                    <>
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                    </>
+                  )}
                 </select>
               ) : (
                 <input
                   type="number"
-                  id={key}
                   name={key}
-                  value={formData[key]}
+                  value={val}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-black focus:border-black focus:ring-black"
+                  className="w-full p-2 rounded-md border border-black"
                   required
                   min="0"
-                  step="0.1"
+                  step="any"
                 />
               )}
             </div>
           ))}
-           <div className="flex justify-center mt-6 space-x-4">
-            <button 
+          <div className="flex justify-center mt-6">
+            <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               Predict
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="px-6 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              Back
             </button>
           </div>
         </form>

@@ -1,3 +1,5 @@
+//frontend/src/services/predictService.ts
+
 interface PredictResponse {
   predictedDisease: string;
   accuracy: number;

@@ -1,98 +1,171 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/models/KidneyModel.tsx
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import Loader from "../common/Loader";
+import ResultDisplay from "../common/ResultDisplay";
 
-const KidneyModel = () => {
-  const navigate = useNavigate();
+interface Detail {
+  metric: string;
+  value: string | number;
+  status: string;
+  recommendedRange: string | [number, number];
+}
+interface PredictResponse {
+  probability: number;
+  modelAccuracy: number;
+  details: Detail[];
+  recommendation: string;
+}
+
+const KidneyModel: React.FC = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    age: '',
-    blood_pressure: '',
-    Specific_Gravity: '',
-    Blood_Glucose_Random: '',
-    Blood_Urea: '',
-    Serum_Creatinine: '',
-    Hemoglobin: '',
-    Pus_Cell_Clumps: '0',
-    Bacteria: '0',
-    Hypertension: '0',
-    Diabetes_Mellitus: '0',
-    Coronary_Artery_Disease: '0',
-    Appetite: '0',
-    Pedal_Edema: '0',
-    Anemia: '0'
+    age: "",
+    blood_pressure: "",
+    Specific_Gravity: "",
+    Blood_Glucose_Random: "",
+    Blood_Urea: "",
+    Serum_Creatinine: "",
+    Hemoglobin: "",
+    Pus_Cell_Clumps: "0",
+    Bacteria: "0",
+    Hypertension: "0",
+    Diabetes_Mellitus: "0",
+    Coronary_Artery_Disease: "0",
+    Appetite: "0",
+    Pedal_Edema: "0",
+    Anemia: "0",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<PredictResponse | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const prompt = `You are a medical assistant. Evaluate kidney disease risk. Input is JSON with patient metrics. 
+Output MUST be pure JSON with these keys:
+  • probability (0–1),
+  • modelAccuracy (0–1),
+  • details (array of {metric,value,status,recommendedRange}),
+  • recommendation (markdown).
+Here is the input:
+
+${JSON.stringify(formData)}`;
+
+      const res = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user!._id, message: prompt }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { response } = await res.json();
+      const raw = response.match(/\{[\s\S]*\}/)?.[0];
+      if (!raw) throw new Error("Invalid JSON from AI");
+      setResult(JSON.parse(raw));
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) return <Loader />;
+  if (result) return <ResultDisplay result={result} />;
+
+  // fields which use selects
+  const selectKeys = [
+    "Pus_Cell_Clumps",
+    "Bacteria",
+    "Hypertension",
+    "Diabetes_Mellitus",
+    "Coronary_Artery_Disease",
+    "Appetite",
+    "Pedal_Edema",
+    "Anemia",
+  ];
 
   return (
     <div className="min-h-screen pt-20 pb-12 flex justify-center bg-[#f6f9fb]">
       <div className="w-full max-w-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Kidney Disease Prediction</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Kidney Disease Prediction
+        </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {Object.keys(formData).map((key, idx) => (
-            <div key={idx} className="flex flex-col">
-              <label htmlFor={key} className="text-sm font-medium text-gray-700 mb-1">
-                {key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim()}
+          {Object.entries(formData).map(([key, val]) => (
+            <div key={key} className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700 mb-1">
+                {key
+                  .replace(/_/g, " ")
+                  .replace(/([A-Z])/g, " $1")
+                  .trim()}
               </label>
-              {['Pus_Cell_Clumps', 'Bacteria', 'Hypertension', 'Diabetes_Mellitus', 'Coronary_Artery_Disease', 'Appetite', 'Pedal_Edema', 'Anemia'].includes(key) ? (
+              {selectKeys.includes(key) ? (
                 <select
-                  id={key}
                   name={key}
-                  value={formData[key]}
+                  value={val}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-black focus:border-black focus:ring-black"
+                  className="w-full p-2 rounded-md border border-black"
                 >
-                  {key === 'Pus_Cell_Clumps' || key === 'Bacteria' ? (
-                    <><option value="0">Not Present</option><option value="1">Present</option></>
-                  ) : null}
-                  {key === 'Hypertension' || key === 'Diabetes_Mellitus' || key === 'Coronary_Artery_Disease' || key === 'Pedal_Edema' || key === 'Anemia' ? (
-                    <><option value="0">No</option><option value="1">Yes</option></>
-                  ) : null}
-                  {key === 'Appetite' ? (
-                    <><option value="0">Good</option><option value="1">Poor</option></>
-                  ) : null}
+                  {["Pus_Cell_Clumps", "Bacteria"].includes(key) && (
+                    <>
+                      <option value="0">Not Present</option>
+                      <option value="1">Present</option>
+                    </>
+                  )}
+                  {[
+                    "Hypertension",
+                    "Diabetes_Mellitus",
+                    "Coronary_Artery_Disease",
+                    "Pedal_Edema",
+                    "Anemia",
+                  ].includes(key) && (
+                    <>
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
+                    </>
+                  )}
+                  {key === "Appetite" && (
+                    <>
+                      <option value="0">Good</option>
+                      <option value="1">Poor</option>
+                    </>
+                  )}
                 </select>
               ) : (
                 <input
                   type="number"
-                  id={key}
                   name={key}
-                  value={formData[key]}
+                  value={val}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-black focus:border-black focus:ring-black"
+                  className="w-full p-2 rounded-md border border-black"
                   required
                   min="0"
-                  step="0.1"
+                  step="any"
                 />
               )}
             </div>
           ))}
-          <div className="flex justify-center mt-6 space-x-4">
+          <div className="flex justify-center mt-6">
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               Predict
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="px-6 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              Back
             </button>
           </div>
         </form>
