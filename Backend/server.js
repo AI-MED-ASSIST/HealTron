@@ -13,6 +13,8 @@ const diseaseRoutes = require("./routes/disease.routes"); // disease routes
 
 const predictRoutes = require("./routes/predict");
 
+const diseasePredRoutes = require("./routes/diseasePredRoutes");
+
 const app = express();
 
 // Connect to MongoDB
@@ -30,6 +32,8 @@ app.use("/api/chat/history", chatHistoryRoutes); // route for chat history
 app.use("/api/diseases", diseaseRoutes); //route for diseases
 
 app.use("/api/predict", predictRoutes);
+
+app.use("/api/diseasepred", diseasePredRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

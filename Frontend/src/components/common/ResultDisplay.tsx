@@ -2,31 +2,53 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { PredictResponse } from "../../services/aiPredictService";
+import { savePrediction } from "../../services/diseasePredService";
+import { useAuth } from "../../context/AuthContext";
 
 interface Props {
-  result: PredictResponse;
+  result: PredictResponse & { diseaseType: string };
 }
 
 const ResultDisplay: React.FC<Props> = ({ result }) => {
   const navigate = useNavigate();
-  const { probability, modelAccuracy, details, recommendation } = result;
+  const { user } = useAuth();
+  const { diseaseType, probability, modelAccuracy, details, recommendation } =
+    result;
+
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
   const offsetProb = circumference * (1 - probability);
   const offsetAcc = circumference * (1 - modelAccuracy);
 
+  const handleSave = async () => {
+    try {
+      await savePrediction({
+        userId: user!._id,
+        diseaseType,
+        probability,
+        modelAccuracy,
+        details,
+        recommendation,
+      });
+      alert("Prediction saved!");
+    } catch (e: any) {
+      alert("Save failed: " + e.message);
+    }
+  };
+
   return (
     <div className="relative p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto pt-20">
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-25 left-4 text-blue-600 hover:text-blue-800 "
+        className="absolute top-20 left-4 text-blue-600 hover:text-blue-800"
       >
         ⬅️Back
       </button>
 
-      <h2 className="text-2xl font-bold mb-6 text-center">Prediction Report</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        {diseaseType} Prediction Report
+      </h2>
 
-      {/* Circular Indicators */}
       <div className="flex justify-around mb-6">
         {/* Probability */}
         <div className="flex flex-col items-center">
@@ -65,7 +87,7 @@ const ResultDisplay: React.FC<Props> = ({ result }) => {
           <div className="mt-2 font-medium">Probability</div>
         </div>
 
-        {/* Model Accuracy */}
+        {/* Accuracy */}
         <div className="flex flex-col items-center">
           <svg width="120" height="120">
             <circle
@@ -103,7 +125,6 @@ const ResultDisplay: React.FC<Props> = ({ result }) => {
         </div>
       </div>
 
-      {/* Metrics Analysis */}
       <div className="mb-6">
         <h3 className="font-medium mb-2">Metrics Analysis</h3>
         <ul className="list-disc list-inside space-y-1">
@@ -118,10 +139,18 @@ const ResultDisplay: React.FC<Props> = ({ result }) => {
         </ul>
       </div>
 
-      {/* Recommendation */}
       <div>
         <h3 className="font-medium mb-2">Recommendation</h3>
         <ReactMarkdown>{recommendation}</ReactMarkdown>
+      </div>
+
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handleSave}
+          className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+        >
+          Save
+        </button>
       </div>
     </div>
   );

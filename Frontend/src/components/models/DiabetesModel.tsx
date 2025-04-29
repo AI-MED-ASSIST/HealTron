@@ -1,3 +1,4 @@
+// src/components/models/DiabetesModel.tsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../common/Loader";
@@ -31,7 +32,9 @@ const DiabetesModel: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<PredictResponse | null>(null);
+  const [result, setResult] = useState<
+    (PredictResponse & { diseaseType: string }) | null
+  >(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,8 +50,8 @@ const DiabetesModel: React.FC = () => {
     setLoading(true);
 
     try {
-      // Prompt now also requests modelAccuracy after probability
-      const prompt = `You are a medical assistant. Evaluate diabetes risk. Input is JSON with patient metrics. 
+      // Prompt now requests modelAccuracy after probability
+      const prompt = `You are a medical assistant. Evaluate diabetes risk. Input is JSON with patient metrics.
 Output MUST be pure JSON with these keys:
   • probability (0–1),
   • modelAccuracy (0–1),
@@ -70,12 +73,16 @@ ${JSON.stringify(formData)}`;
         const txt = await res.text();
         throw new Error(txt);
       }
+
       const data = await res.json();
-      const raw = data.response as string;
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (!match) throw new Error("Invalid JSON response from AI");
-      const parsed: PredictResponse = JSON.parse(match[0]);
-      setResult(parsed);
+      const raw = (data.response as string).match(/\{[\s\S]*\}/)?.[0];
+      if (!raw) throw new Error("Invalid JSON response from AI");
+      const parsed: PredictResponse = JSON.parse(raw);
+
+      setResult({
+        ...parsed,
+        diseaseType: "Diabetes",
+      });
     } catch (err: any) {
       setError(err.message);
     } finally {

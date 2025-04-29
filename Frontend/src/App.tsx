@@ -32,6 +32,8 @@ import MedicalConditionPage from "./pages/MedicalConditionPage";
 import SymptomCheckerPage from "./pages/SymptomCheckerPage";
 import ViewPreviousHistory from "./pages/ViewPreviousHistory";
 
+import PredictionHistoryPage from "./pages/PredictionHistoryPage";
+
 // PrivateRoute: if not authenticated, redirect to /login
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -99,6 +101,11 @@ function App() {
                       <Route
                         path="/history"
                         element={<ViewPreviousHistory />}
+                      />
+
+                      <Route
+                        path="/disease-pred"
+                        element={<PredictionHistoryPage />}
                       />
                     </Routes>
                     <Chatbot />
