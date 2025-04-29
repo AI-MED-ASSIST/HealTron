@@ -1,4 +1,3 @@
-// src/pages/PredictionHistoryPage.tsx
 import React, { useEffect, useState } from "react";
 import {
   getPredictions,
@@ -9,12 +8,14 @@ import { FaTrash, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import ConfirmModal from "../modals/ConfirmModal";
 
 const PredictionHistoryPage: React.FC = () => {
   const { user } = useAuth();
   const [history, setHistory] = useState<SavedPrediction[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,14 +35,16 @@ const PredictionHistoryPage: React.FC = () => {
     );
   }
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Delete this entry?")) return;
+  const handleDeleteConfirm = async () => {
+    if (!deleteId) return;
     try {
-      await deletePrediction(id);
-      setHistory((h) => h.filter((item) => item._id !== id));
-      if (expandedId === id) setExpandedId(null);
+      await deletePrediction(deleteId);
+      setHistory((h) => h.filter((item) => item._id !== deleteId));
     } catch (e: any) {
       alert("Delete failed: " + e.message);
+    } finally {
+      setDeleteId(null);
+      if (expandedId === deleteId) setExpandedId(null);
     }
   };
 
@@ -50,15 +53,15 @@ const PredictionHistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto pt-20">
-      <div className="mb-6 flex flex-col items-center relative">
+    <div className="p-6 max-w-4xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Prediction History</h1>
         <button
           onClick={() => navigate(-1)}
-          className="absolute left-0 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
         >
-          ← Back
+          &larr; Back
         </button>
-        <h1 className="text-3xl font-bold text-center">Prediction History</h1>
       </div>
 
       {loading ? (
@@ -129,9 +132,8 @@ const PredictionHistoryPage: React.FC = () => {
 
                 {/* Delete Button */}
                 <button
-                  onClick={() => handleDelete(h._id)}
-                  className="absolute top-16 right-10 text-red-500 hover:text-red-700"
-                  title="Delete this record"
+                  onClick={() => setDeleteId(h._id)}
+                  className="absolute bottom-2 right-2 text-red-500 hover:text-red-700"
                 >
                   <FaTrash />
                 </button>
@@ -140,6 +142,15 @@ const PredictionHistoryPage: React.FC = () => {
           })}
         </div>
       )}
+
+      {/* Confirm Delete Modal */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this record?"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteId(null)}
+      />
     </div>
   );
 };

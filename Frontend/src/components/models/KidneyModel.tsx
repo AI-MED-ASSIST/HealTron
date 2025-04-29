@@ -38,7 +38,9 @@ const KidneyModel: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<PredictResponse | null>(null);
+  const [result, setResult] = useState<
+    (PredictResponse & { diseaseType: string }) | null
+  >(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,24 +48,20 @@ const KidneyModel: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
-  };
+  ) => setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
-      const prompt = `You are a medical assistant. Evaluate kidney disease risk. Input is JSON with patient metrics. 
+      const prompt = `You are a medical assistant. Evaluate kidney disease risk. Input is JSON with patient metrics.
 Output MUST be pure JSON with these keys:
   • probability (0–1),
   • modelAccuracy (0–1),
   • details (array of {metric,value,status,recommendedRange}),
   • recommendation (markdown).
 Here is the input:
-
 ${JSON.stringify(formData)}`;
 
       const res = await fetch("http://localhost:5000/api/chat", {
@@ -72,12 +70,13 @@ ${JSON.stringify(formData)}`;
         body: JSON.stringify({ userId: user!._id, message: prompt }),
       });
       if (!res.ok) throw new Error(await res.text());
-      const { response } = await res.json();
-      const raw = response.match(/\{[\s\S]*\}/)?.[0];
-      if (!raw) throw new Error("Invalid JSON from AI");
-      setResult(JSON.parse(raw));
-    } catch (e: any) {
-      setError(e.message);
+      const data = await res.json();
+      const raw = (data.response as string).match(/\{[\s\S]*\}/)?.[0];
+      if (!raw) throw new Error("Invalid JSON response from AI");
+      const parsed: PredictResponse = JSON.parse(raw);
+      setResult({ ...parsed, diseaseType: "Kidney Disease" });
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -86,7 +85,6 @@ ${JSON.stringify(formData)}`;
   if (loading) return <Loader />;
   if (result) return <ResultDisplay result={result} />;
 
-  // fields which use selects
   const selectKeys = [
     "Pus_Cell_Clumps",
     "Bacteria",

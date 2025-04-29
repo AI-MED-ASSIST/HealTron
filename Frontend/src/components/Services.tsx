@@ -1,86 +1,124 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Stethoscope, Brain, FileText, HeartPulse, Activity, Users } from 'lucide-react';
-
-const services = [
-  {
-    title: 'Disease Prediction',
-    description: 'Advanced AI algorithms for accurate disease prediction and risk assessment',
-    icon: HeartPulse,
-  },
-  {
-    title: 'Medical Analysis',
-    description: 'Comprehensive analysis of medical data and patient history',
-    icon: Activity,
-  },
-  {
-    title: 'Health Monitoring',
-    description: 'Continuous monitoring of vital health parameters and indicators',
-    icon: Stethoscope,
-  },
-  {
-    title: 'AI Diagnostics',
-    description: 'Cutting-edge artificial intelligence for medical diagnostics',
-    icon: Brain,
-  },
-  {
-    title: 'Medical Reports',
-    description: 'Detailed medical reports and analysis documentation',
-    icon: FileText,
-  },
-  {
-    title: 'Patient Care',
-    description: 'Personalized patient care and health recommendations',
-    icon: Users,
-  },
-];
+import React, { useState, useEffect } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Services = () => {
-  return (
-    <div id="services" className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-[#f6f9fb]">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl font-bold text-gray-900 mb-4"
-          >
-            Our Services
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
-          >
-            Comprehensive medical services powered by advanced artificial intelligence
-          </motion.p>
-        </div>
+  const features = [
+    {
+      title: "Personalized Healthcare",
+      description:
+        "Tailored Solutions for Every Patient. The AI system customizes healthcare solutions by analyzing individual health data, providing personalized treatments and care recommendations.",
+      image: "/Services/Personal Healthcare.png",
+    },
+    {
+      title: "Medical Analysis",
+      description:
+        "Comprehensive Analysis of Medical Data and Patient History. The system analyzes medical data and patient records, providing healthcare professionals with insights to make informed, personalized treatment decisions.",
+      image: "/Services/Medical Analysis.png",
+    },
+    {
+      title: "Real-Time Healthcare Insights",
+      description:
+        "Immediate Action Based on Real-Time Health Monitoring. Real-time health data enables quick responses to changes in health status, supporting proactive and immediate healthcare actions.",
+      image: "/Services/Realtime.png",
+    },
+    {
+      title: "Medical Reports",
+      description:
+        "Detailed Medical Reports and Analysis Documentation. Comprehensive reports and analysis documentation help both patients and healthcare providers stay informed about health conditions and treatment options.",
+      image: "/Services/Medical Report.png",
+    },
+    {
+      title: "AI Diagnostics",
+      description:
+        "Cutting-edge Artificial Intelligence for Medical Diagnostics. AI-powered diagnostic tools quickly analyze symptoms and test results, providing accurate diagnoses and assisting doctors in delivering timely treatments.",
+      image: "/Services/AI Diagnostics.png",
+    },
+    {
+      title: "Safe & Secure",
+      description:
+        "Your health data is protected with advanced encryption and security protocols, ensuring your privacy and confidentiality at all times.",
+      image: "/Services/Safe & Secure.png",
+    },
+  ];
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-lg mb-4">
-                <service.icon className="w-6 h-6 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {service.title}
-              </h3>
-              <p className="text-gray-600">
-                {service.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? features.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === features.length - 1 ? 0 : prev + 1));
+  };
+
+  // Automatic slide change every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNext();
+    }, 4000); // 3000 milliseconds = 3 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [currentIndex]); // Listen to currentIndex change
+
+  return (
+    <section className="py-16 bg-white text-center">
+      <h2 className="text-4xl font-bold mb-6 text-gray-800">
+        Our <span className="text-[#2092fa]">Services</span>
+      </h2>
+      <h3 className="text 3xl font-serif text-gray-600 mb-4">to get inghj</h3>
+
+      <div className="relative flex items-center justify-center">
+        {/* Left Arrow */}
+        <button
+          onClick={goToPrevious}
+          className="absolute left-32 z-10 bg-[#2092fa] hover:bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition"
+          style={{
+            top: "50%",
+            transform: "translateY(160%)",
+          }}
+        >
+          <FaChevronLeft />
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={goToNext}
+          className="absolute right-32 z-10 bg-[#2092fa] hover:bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition"
+          style={{
+            top: "50%",
+            transform: "translateY(160%)",
+          }}
+        >
+          <FaChevronRight />
+        </button>
       </div>
-    </div>
+
+      {/* Content Section */}
+      <div className="mt-8 max-w-xl mx-auto">
+        <img
+          src={features[currentIndex].image}
+          alt={features[currentIndex].title}
+          className="w-24 h-34 mx-auto mb-4 object-contain"
+        />
+        <h3 className="text-3xl font-semibold text-gray-800 mb-4">
+          {features[currentIndex].title}
+        </h3>
+        <p className="text-gray-600">{features[currentIndex].description}</p>
+      </div>
+
+      {/* Pagination Dots */}
+      <div className="flex justify-center mt-8 space-x-3">
+        {features.map((_, index) => (
+          <span
+            key={index}
+            className={`w-4 h-4 rounded-full ${
+              index === currentIndex ? "bg-[#2092fa]" : "bg-gray-400"
+            }`}
+            style={{ transition: "all 0.3s" }}
+          />
+        ))}
+      </div>
+    </section>
   );
 };
 

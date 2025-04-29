@@ -6,6 +6,7 @@ import * as random from "maath/random";
 import { useState, useRef, Suspense } from "react";
 import type { Points as PointsType } from "three";
 import { useNavigate } from "react-router-dom";
+
 const StarBackground = (props: PointsProps) => {
   const ref = useRef<PointsType | null>(null);
   const [sphere] = useState(() =>
@@ -50,7 +51,20 @@ const Home = () => {
   return (
     <div
       id="home"
-      className="relative min-h-screen flex items-center justify-center text-center overflow-hidden bg-black"
+      className="relative min-h-screen flex items-center justify-center text-center overflow-hidden"
+      style={{
+        backgroundColor: "#f6f9fb",
+        backgroundImage: `
+          radial-gradient(
+            circle at top center,
+            rgba(0, 119, 255, 0.25) 0%,
+            rgba(246, 249, 251, 1) 40%
+          )
+        `,
+        backgroundSize: "150% 150%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "top center",
+      }}
     >
       {/* Stars Animation Only */}
       <div className="absolute inset-0">
@@ -62,27 +76,31 @@ const Home = () => {
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-5xl font-bold text-[#f6f9fb]">
-            PERSONALIZED AI-MED ASSIST
-          </h1>
-          <p className="text-xl text-[#f6f9fb]">
-            Your Intelligent Healthcare Companion
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 px-4">
+        {/* Quote Section */}
+        <div className="text-5xl font-extrabold text-[#001233] leading-tight">
+          Your health,
+        </div>
+        <div className="text-5xl font-extrabold text-[#001233] leading-tight">
+          Redefined by AI.
+        </div>
+
+        {/* Statement Section */}
+        <div className="text-xl text-[#4a4a4a] mt-4 max-w-3xl mx-auto px-4 text-center leading-relaxed">
+          <p>
+            Personalized AI Med Assist offers tailored health insights, helping
+            you manage your wellness with ease and confidence. With the latest
+            AI technology, we make health management simpler and more effective.
           </p>
         </div>
 
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        {/* Button */}
+        <button
           onClick={handleGetStarted}
-          className="bg-[#f6f9fb] text-black font-bold px-8 py-3 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 mt-8"
+          className="bg-[#2092fa] text-white px-8 py-4 rounded-full text-lg shadow-lg hover:shadow-xl hover:bg-[] transition-all duration-300 mt-8"
         >
           Get Started
-        </motion.button>
+        </button>
       </div>
     </div>
   );

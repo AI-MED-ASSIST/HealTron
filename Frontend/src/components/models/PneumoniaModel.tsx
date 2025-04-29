@@ -23,7 +23,9 @@ const PneumoniaModel: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<PredictResponse | null>(null);
+  const [result, setResult] = useState<
+    (PredictResponse & { diseaseType: string }) | null
+  >(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,14 +49,13 @@ const PneumoniaModel: React.FC = () => {
       setLoading(true);
       try {
         const payload = { image: reader.result as string };
-        const prompt = `You are a medical assistant. Detect pneumonia from a chest X-ray. Input is JSON with one field, image (base64). 
+        const prompt = `You are a medical assistant. Detect pneumonia from a chest X-ray. Input is JSON with one field, image (base64).
 Output MUST be pure JSON with these keys:
   • probability (0–1),
   • modelAccuracy (0–1),
-  • details (array), 
+  • details (array),
   • recommendation (markdown).
 Here is the input:
-
 ${JSON.stringify(payload)}`;
 
         const res = await fetch("http://localhost:5000/api/chat", {
@@ -63,12 +64,13 @@ ${JSON.stringify(payload)}`;
           body: JSON.stringify({ userId: user!._id, message: prompt }),
         });
         if (!res.ok) throw new Error(await res.text());
-        const { response } = await res.json();
-        const raw = response.match(/\{[\s\S]*\}/)?.[0];
-        if (!raw) throw new Error("Invalid JSON from AI");
-        setResult(JSON.parse(raw));
-      } catch (e: any) {
-        setError(e.message);
+        const data = await res.json();
+        const raw = (data.response as string).match(/\{[\s\S]*\}/)?.[0];
+        if (!raw) throw new Error("Invalid JSON response from AI");
+        const parsed: PredictResponse = JSON.parse(raw);
+        setResult({ ...parsed, diseaseType: "Pneumonia Detection" });
+      } catch (err: any) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }

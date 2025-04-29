@@ -1,8 +1,9 @@
-// frontend/src/components/Navbar.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X, ArrowLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import { Link as ScrollLink } from "react-scroll";
+import { useLocation } from "react-router-dom";
 
 interface NavbarProps {
   onProfileClick: () => void;
@@ -11,7 +12,9 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user } = useAuth();
+  const location = useLocation();
 
   const navLinks = [
     { name: "Home", id: "home" },
@@ -21,6 +24,22 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
     { name: "Contact", id: "contact" },
   ];
 
+  const mobileMenuVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isTop = window.scrollY < 10;
+      setIsScrolled(!isTop);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleScroll = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
@@ -29,35 +48,40 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
     }
   };
 
+  // Determine if we should show white background
+  const shouldShowWhiteBg = isScrolled || location.pathname !== "/";
+
   return (
-    <nav className="fixed w-full bg-gray-800 shadow-lg backdrop-blur-md z-50">
+    <nav
+      className={`fixed top-0 z-50 w-full transition-all duration-300 select-none ${
+        shouldShowWhiteBg ? "bg-white shadow-md" : "bg-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left side: Brand */}
-          <a
-            href="#home"
-            onClick={() => handleScroll("home")}
-            className="text-2xl font-bold text-white cursor-pointer"
-          >
-            AI-Med Assist
-          </a>
+          <div className="text-2xl font-bold text-gray-800">
+            Heal<span className="text-[#0077b6]">Tron</span>
+          </div>
 
           {/* Desktop Navigation Links in the middle */}
           <div className="hidden md:flex space-x-8">
             {navLinks.map((link) => (
-              <motion.a
+              <motion.div
                 key={link.name}
-                href={`#${link.id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleScroll(link.id);
-                }}
-                whileHover={{ y: 1, scale: 1.1, color: "#60a5fa" }}
+                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
-                className="text-white transition-all duration-300 py-2 text-sm font-medium cursor-pointer hover:text-blue-400"
               >
-                {link.name}
-              </motion.a>
+                <ScrollLink
+                  to={link.id}
+                  smooth
+                  offset={-80}
+                  duration={500}
+                  className="text-gray-700 text-base font-medium hover:text-[#0077b6] cursor-pointer transition-colors"
+                >
+                  {link.name}
+                </ScrollLink>
+              </motion.div>
             ))}
           </div>
 
@@ -65,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
           <div className="flex items-center">
             <button onClick={onProfileClick} className="focus:outline-none">
               {sidebarOpen ? (
-                <ArrowLeft className="h-6 w-6 text-white" />
+                <ArrowLeft className="h-6 w-6 text-[#1c2434]" />
               ) : (
                 <img
                   src={
@@ -78,13 +102,15 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
               )}
             </button>
             {user?.username && (
-              <span className="ml-2 text-white text-md">{user.username}</span>
+              <span className="ml-2 text-gray-700 text-md">
+                {user.username}
+              </span>
             )}
             {/* Mobile Navigation Button */}
             <div className="md:hidden ml-4">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white hover:text-white focus:outline-none"
+                className="text-gray-700 hover:text-[#0077b6] focus:outline-none"
               >
                 {isOpen ? (
                   <X className="h-6 w-6" />
@@ -97,27 +123,38 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
         </div>
 
         {/* Mobile Navigation Menu */}
-        {isOpen && (
-          <div className="md:hidden bg-gray-700">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navLinks.map((link) => (
-                <motion.a
-                  key={link.name}
-                  href={`#${link.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleScroll(link.id);
-                  }}
-                  whileHover={{ x: 5, scale: 1.05, color: "#60a5fa" }}
-                  transition={{ duration: 0.2 }}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-blue-400 hover:bg-gray-600 transition-all duration-300 cursor-pointer"
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className="md:hidden bg-white w-full absolute left-0 shadow-md rounded-b-lg"
+              variants={mobileMenuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <div className="flex flex-col p-4 space-y-4">
+                {navLinks.map((link) => (
+                  <motion.div
+                    key={link.name}
+                    whileHover={{ x: 5, scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ScrollLink
+                      to={link.id}
+                      smooth
+                      offset={-80}
+                      duration={500}
+                      onClick={() => setIsOpen(false)}
+                      className="text-gray-700 text-base font-medium hover:text-[#0077b6] cursor-pointer transition-colors"
+                    >
+                      {link.name}
+                    </ScrollLink>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );

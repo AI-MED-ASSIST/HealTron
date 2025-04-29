@@ -2,6 +2,7 @@ const DiseasePred = require("../models/DiseasePred");
 
 // POST /api/diseasepred
 // Expects { userId, diseaseType, probability, modelAccuracy, details, recommendation }
+// POST /api/diseasepred
 exports.createDiseasePred = async (req, res) => {
   try {
     const {
@@ -12,6 +13,21 @@ exports.createDiseasePred = async (req, res) => {
       details,
       recommendation,
     } = req.body;
+
+    // 1) Check for an existing identical record
+    const existing = await DiseasePred.findOne({
+      user: userId,
+      diseaseType,
+      probability,
+      modelAccuracy,
+      recommendation,
+      // NOTE: you might also compare 'details' if you care about exact match
+    });
+    if (existing) {
+      return res.status(400).json({ message: "Already saved" });
+    }
+
+    // 2) Otherwise create normally
     const pred = await DiseasePred.create({
       user: userId,
       diseaseType,
