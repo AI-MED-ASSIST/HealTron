@@ -1,5 +1,6 @@
 {
-  "name": "ai-med-assist",
+  "name": "healtron",
+  "homepage": "https://AI-MED-ASSIST.github.io/HealTron/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
