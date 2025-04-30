@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import Loader from "../common/Loader";
 import ResultDisplay from "../common/ResultDisplay";
 
+import { API_BASE_URL } from "../../config";
 interface Detail {
   metric: string;
   value: string | number;
@@ -59,7 +60,7 @@ Output MUST be pure JSON with these keys:
 Here is the input:
 ${JSON.stringify(formData)}`;
 
-      const res = await fetch("http://localhost:5000/api/chat", {
+      const res = await fetch(`${API_BASE_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user!._id, message: prompt }),

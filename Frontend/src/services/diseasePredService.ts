@@ -1,5 +1,5 @@
 // src/services/diseasePredService.ts
-
+import { API_BASE_URL } from "../config";
 export interface SavedPrediction {
   _id: string;
   user: string;
@@ -12,7 +12,7 @@ export interface SavedPrediction {
   updatedAt: string;
 }
 
-const BASE_URL = "http://localhost:5000/api/diseasepred";
+const BASE_URL = `${API_BASE_URL}/diseasepred`;
 
 export async function savePrediction(payload: {
   userId: string;

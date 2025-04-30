@@ -1,5 +1,5 @@
 // src/services/chatPredictService.ts
-
+import { API_BASE_URL } from "../config";
 /**
  * A single metric evaluation.
  */
@@ -35,7 +35,7 @@ interface GeminiResponse {
 }
 
 async function callGemini(payload: GeminiRequest): Promise<GeminiResponse> {
-  const res = await fetch("http://localhost:5000/api/chat", {
+  const res = await fetch(`${API_BASE_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

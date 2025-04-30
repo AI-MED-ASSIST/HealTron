@@ -1,6 +1,6 @@
 // src/services/aiPredictService.ts
-
-const BASE_URL = "http://localhost:5001/api/predict";
+import { PY_API_BASE_URL } from "../config";
+const BASE_URL = `${PY_API_BASE_URL}/predict`;
 
 /**
  * A single metric evaluation.

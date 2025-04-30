@@ -1,6 +1,7 @@
 // controllers/predictController.js
 const axios = require("axios");
-const CHAT_API_URL = "http://localhost:5000/api/chat";
+const { CHAT_API_BASE_URL } = process.env;
+const CHAT_API_URL = `${CHAT_API_BASE_URL}/api/chat`;
 
 async function handlePredict(req, res) {
   const { model } = req.params;

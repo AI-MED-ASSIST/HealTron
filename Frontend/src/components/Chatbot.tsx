@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "../context/AuthContext";
 
+import { API_BASE_URL } from "../config";
+
 // Define the message type
 interface Message {
   text: string;
@@ -54,9 +56,7 @@ const Chatbot: React.FC = () => {
       if (user && showHistory) {
         try {
           setHistoryLoading(true);
-          const res = await fetch(
-            `http://localhost:5000/api/chat/history/${user._id}`
-          );
+          const res = await fetch(`${API_BASE_URL}/chat/history/${user._id}`);
           const data = await res.json();
           setChatHistory(data.sessions || []);
         } catch (error) {
@@ -72,12 +72,9 @@ const Chatbot: React.FC = () => {
   // Function to delete a chat session by its ID
   const handleDeleteSession = async (sessionId: string) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/chat/history/${sessionId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/chat/history/${sessionId}`, {
+        method: "DELETE",
+      });
       if (res.ok) {
         setChatHistory(
           chatHistory.filter((session) => session._id !== sessionId)
@@ -127,7 +124,7 @@ As Healtron - personalized AI-med Assist, please answer the following question i
       // Build the extended prompt with user data for context analysis
       const extendedPrompt = buildExtendedPrompt(input);
       // Replace with your actual backend endpoint for chatbot response
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: extendedPrompt, userId: user?._id }),
@@ -158,7 +155,7 @@ As Healtron - personalized AI-med Assist, please answer the following question i
   const handleNewChat = async () => {
     if (messages.length > 0 && user) {
       try {
-        await fetch("http://localhost:5000/api/chat/history", {
+        await fetch(`${API_BASE_URL}/chat/history`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user._id, messages }),

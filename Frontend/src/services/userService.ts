@@ -1,6 +1,8 @@
 // src/services/userService.ts
+import { API_BASE_URL } from "../config";
+
 export const getProfile = async (userId: string) => {
-  const response = await fetch(`http://localhost:5000/api/users/${userId}`);
+  const response = await fetch(`${API_BASE_URL}/users/${userId}`);
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || "Get profile failed");
@@ -9,7 +11,7 @@ export const getProfile = async (userId: string) => {
 };
 
 export const updateProfile = async (userId: string, updateData: any) => {
-  const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updateData),
@@ -27,7 +29,7 @@ export async function addMedicalCondition(
   condition: string
 ): Promise<string[]> {
   const res = await fetch(
-    `http://localhost:5000/api/users/${userId}/medical-conditions`,
+    `${API_BASE_URL}/users/${userId}/medical-conditions`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
