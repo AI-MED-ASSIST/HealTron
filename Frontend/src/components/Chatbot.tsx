@@ -7,6 +7,8 @@ import { useAuth } from "../context/AuthContext";
 
 import { API_BASE_URL } from "../config";
 
+import Boticon from "../../images/Boticon.png"; // Assuming you have a Boticon image in your assets
+
 // Define the message type
 interface Message {
   text: string;
@@ -176,11 +178,7 @@ As Healtron - personalized AI-med Assist, please answer the following question i
         onClick={toggleChat}
         className="fixed bottom-6 right-6 z-50 p-2 bg-gray-800 rounded-full shadow-lg"
       >
-        <img
-          src="/images/Boticon.png"
-          alt="Chatbot"
-          className="w-10 h-10 object-contain"
-        />
+        <img src={Boticon} alt="Chatbot" className="w-10 h-10 object-contain" />
       </button>
 
       {chatVisible && (
