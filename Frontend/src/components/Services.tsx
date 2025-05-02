@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import PersonalHealthcare from "../../images/services/patient-care_17084970.png";
 
 const Services = () => {
   const features = [
@@ -7,7 +8,7 @@ const Services = () => {
       title: "Personalized Healthcare",
       description:
         "Tailored Solutions for Every Patient. The AI system customizes healthcare solutions by analyzing individual health data, providing personalized treatments and care recommendations.",
-      image: "/Services/Personal Healthcare.png",
+      image: PersonalHealthcare,
     },
     {
       title: "Medical Analysis",
