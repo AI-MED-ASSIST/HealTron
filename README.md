@@ -1,8 +1,6 @@
 # AI‑Med Assist
 
-**Lead AI‑ML Developer:** Your Name  
-**Role:** Predictive modeling, intelligent chatbot, full backend architecture, frontend contributions
-
+Personalized AI Med Assist offers tailored health insights, helping you manage your wellness with ease and confidence. With the latest AI technology, we make health management simpler and more effective.
 ---
 
 ## Table of Contents
