@@ -7,6 +7,8 @@ import { motion, useAnimation } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "../context/AuthContext";
 import botlogo from "../../public/Boticon.png";
+
+import { API_BASE_URL } from "../config";
 interface Message {
   text: string;
   sender: "user" | "bot";
@@ -77,9 +79,7 @@ const Chatbot: React.FC = () => {
       if (user && showHistory) {
         try {
           setHistoryLoading(true);
-          const res = await fetch(
-            `http://localhost:5000/api/chat/history/${user._id}`
-          );
+          const res = await fetch(`${API_BASE_URL}/chat/history/${user._id}`);
           const data = await res.json();
           setChatHistory(data.sessions || []);
         } catch (error) {
@@ -94,10 +94,9 @@ const Chatbot: React.FC = () => {
 
   const handleDeleteSession = async (sessionId: string) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/chat/history/${sessionId}`,
-        { method: "DELETE" }
-      );
+      const res = await fetch(`${API_BASE_URL}/chat/history/${sessionId}`, {
+        method: "DELETE",
+      });
       if (res.ok) {
         setChatHistory(
           chatHistory.filter((session) => session._id !== sessionId)
@@ -134,7 +133,7 @@ const Chatbot: React.FC = () => {
     setIsSending(true);
     try {
       const extendedPrompt = buildExtendedPrompt(input);
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: extendedPrompt, userId: user?._id }),
@@ -163,7 +162,7 @@ const Chatbot: React.FC = () => {
 
   const handleNewChat = () => {
     if (messages.length > 0 && user) {
-      fetch("http://localhost:5000/api/chat/history", {
+      fetch(`${API_BASE_URL}/chat/history`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user._id, messages }),
