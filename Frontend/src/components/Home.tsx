@@ -1,57 +1,73 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Points, PointMaterial } from "@react-three/drei";
-import { Canvas, type PointsProps, useFrame } from "@react-three/fiber";
-import * as random from "maath/random";
-import { useState, useRef, Suspense } from "react";
-import type { Points as PointsType } from "three";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-const StarBackground = (props: PointsProps) => {
-  const ref = useRef<PointsType | null>(null);
-  const [sphere] = useState(() =>
-    random.inSphere(new Float32Array(5000), { radius: 1.2 })
-  );
-
-  useFrame((_state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.x -= delta / 10;
-      ref.current.rotation.y -= delta / 15;
-    }
+const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
   });
 
-  return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points
-        ref={ref}
-        stride={3}
-        positions={new Float32Array(sphere)}
-        frustumCulled
-        {...props}
-      >
-        <PointMaterial
-          transparent
-          color="#fff"
-          size={0.002}
-          sizeAttenuation
-          depthWrite={false}
-        />
-      </Points>
-    </group>
-  );
-};
+  // This will trigger animations both on initial load and on refresh
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
 
-const Home = () => {
-  const navigate = useNavigate();
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+        delayChildren: 0.2,
+        duration: 0.8,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
+  // Background gradient animation
+  const backgroundVariants = {
+    hidden: {
+      backgroundPosition: "50% 0%",
+      opacity: 0.7,
+    },
+    visible: {
+      backgroundPosition: "50% 10%",
+      opacity: 1,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut",
+      },
+    },
+  };
 
   const handleGetStarted = () => {
     navigate("/symptom-checker");
   };
 
   return (
-    <div
+    <motion.div
       id="home"
-      className="relative min-h-screen flex items-center justify-center text-center overflow-hidden"
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={backgroundVariants}
+      className="relative min-h-screen flex items-center justify-center text-center overflow-hidden py-20"
       style={{
         backgroundColor: "#f6f9fb",
         backgroundImage: `
@@ -61,48 +77,47 @@ const Home = () => {
             rgba(246, 249, 251, 1) 40%
           )
         `,
-        backgroundSize: "150% 150%",
+        backgroundSize: "210% 190%",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "top center",
       }}
     >
-      {/* Stars Animation Only */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 1] }}>
-          <Suspense fallback={null}>
-            <StarBackground />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 px-4">
-        {/* Quote Section */}
-        <div className="text-5xl font-extrabold text-[#001233] leading-tight">
+      <motion.div
+        className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 px-4 sm:px-6 md:px-8"
+        variants={containerVariants}
+      >
+        <motion.div
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight"
+          variants={itemVariants}
+        >
           Your health,
-        </div>
-        <div className="text-5xl font-extrabold text-[#001233] leading-tight">
-          Redefined by AI.
-        </div>
-
-        {/* Statement Section */}
-        <div className="text-xl text-[#4a4a4a] mt-4 max-w-3xl mx-auto px-4 text-center leading-relaxed">
+        </motion.div>
+        <motion.div
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight"
+          variants={itemVariants}
+        >
+          Redefined by <span className="text-[#2092fa]">AI.</span>
+        </motion.div>
+        <motion.div
+          className="text-base sm:text-lg md:text-xl text-gray-700 mt-2 md:mt-4 max-w-xs sm:max-w-xl md:max-w-3xl mx-auto px-2 sm:px-4 text-center leading-relaxed"
+          variants={itemVariants}
+        >
           <p>
             Personalized AI Med Assist offers tailored health insights, helping
             you manage your wellness with ease and confidence. With the latest
             AI technology, we make health management simpler and more effective.
           </p>
-        </div>
-
-        {/* Button */}
-        <button
+        </motion.div>
+        <motion.button
+          variants={itemVariants}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleGetStarted}
-          className="bg-[#2092fa] text-white px-8 py-4 rounded-full text-lg shadow-lg hover:shadow-xl hover:bg-[] transition-all duration-300 mt-8"
+          className="bg-[#2092fa] text-gray-50  font-bold px-6 sm:px-7 md:px-10 py-3 md:py-5 rounded-full text-base sm:text-lg shadow-lg hover:shadow-xl hover:bg-[#2092fa] transition-all duration-300 mt-6 md:mt-8"
         >
           Get Started
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 };
 

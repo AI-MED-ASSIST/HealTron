@@ -40,7 +40,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-[#f6f9fb]">
+    <section id="contact" className="py-12 bg-gray-50 ">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
@@ -49,11 +49,11 @@ const Contact = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             Contact Us
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Get in touch with our team for any questions or support
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+            Get in touch with our team for any queries or support
           </p>
         </motion.div>
 
@@ -68,13 +68,13 @@ const Contact = () => {
               {contactInfo.map((info, index) => (
                 <div key={index} className="flex items-center space-x-6 w-full">
                   <div className="p-3 bg-blue-100 rounded-full">
-                    <info.icon className="h-6 w-6 text-blue-600" />
+                    <info.icon className="h-6 w-6 text-[#2092fa]" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-800">
                       {info.title}
                     </h3>
-                    <p className="text-gray-600">{info.details}</p>
+                    <p className="text-gray-700">{info.details}</p>
                   </div>
                 </div>
               ))}
@@ -101,7 +101,7 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-[#2092fa] focus:ring-[#2092fa]"
                   required
                 />
               </div>
@@ -120,7 +120,7 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-[#2092fa] focus:ring-[#2092fa]"
                   required
                 />
               </div>
@@ -139,7 +139,7 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-400 p-2 shadow-sm focus:border-[#2092fa] focus:ring-[#2092fa]"
                   required
                 ></textarea>
               </div>
@@ -147,7 +147,7 @@ const Contact = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full flex justify-center items-center bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                className="w-full flex justify-center items-center bg-[#2092fa] text-white px-6 py-3 rounded-md hover:bg-[#2092fa] transition-colors duration-300"
               >
                 <Send className="h-5 w-5 mr-2" />
                 Send Message

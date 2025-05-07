@@ -6,9 +6,10 @@ import {
   deletePrediction,
   Prediction,
 } from "../services/predictHistoryService";
-import { FaSpinner, FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaTrash, FaSpinner } from "react-icons/fa";
 import ConfirmModal from "../modals/ConfirmModal";
-import { useNavigate } from "react-router-dom";
+
+const cn = (...classes: string[]) => classes.filter(Boolean).join(" ");
 
 const ViewPreviousHistory: React.FC = () => {
   const { user } = useAuth();
@@ -17,7 +18,6 @@ const ViewPreviousHistory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [confirmIdx, setConfirmIdx] = useState<number | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -33,13 +33,15 @@ const ViewPreviousHistory: React.FC = () => {
     if (user) load();
   }, [user]);
 
-  const toggle = (i: number) => setExpanded(expanded === i ? null : i);
+  const toggle = (i: number) => {
+    setExpanded((prevExpanded) => (prevExpanded === i ? null : i));
+  };
 
   const handleDelete = async (idx: number) => {
     try {
       await deletePrediction(history[idx].id);
       setHistory((h) => h.filter((_, j) => j !== idx));
-      if (expanded === idx) setExpanded(null);
+      setExpanded(null);
     } catch (e: any) {
       alert(e.message);
     } finally {
@@ -48,17 +50,7 @@ const ViewPreviousHistory: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-900 text-gray-100 pt-20 px-6">
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute left-8 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
-      >
-        &larr; Back
-      </button>
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Previous Symptom Checks
-      </h1>
-
+    <div className="min-h-screen bg-gray-50 text-gray-800 pt-10 px-4 md:px-8 lg:px-10">
       {/* Confirmation Modal */}
       <ConfirmModal
         isOpen={confirmIdx !== null}
@@ -72,16 +64,18 @@ const ViewPreviousHistory: React.FC = () => {
       {loading ? (
         <div className="text-center py-20">
           <FaSpinner
-            className="text-4xl mx-auto"
+            className="text-4xl mx-auto text-gray-700"
             style={{ animation: "spin 1s linear infinite" }}
           />
         </div>
       ) : error ? (
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500 text-sm md:text-base">{error}</p>
       ) : history.length === 0 ? (
-        <p>No previous checks found.</p>
+        <p className="text-gray-600 text-sm md:text-base">
+          No previous checks found.
+        </p>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {history.map((p, i) => {
             const truncated =
               p.recommendation.length > 100
@@ -91,38 +85,43 @@ const ViewPreviousHistory: React.FC = () => {
             return (
               <div
                 key={i}
-                className="bg-gray-800 rounded-lg shadow overflow-hidden"
+                className={cn(
+                  "bg-white rounded-xl shadow-md border border-gray-400 overflow-hidden flex flex-col transition-all duration-300",
+                  expanded === i ? "min-h-[300px]" : "h-[180px]"
+                )}
               >
-                <div className="p-4">
+                <div className="p-4 flex-grow overflow-hidden">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 text-left">
-                      <p className="text-xl font-semibold">{p.disease}</p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-lg md:text-xl font-semibold text-gray-800">
+                        {p.disease}
+                      </p>
+                      <p className="text-sm text-gray-500">
                         Accuracy: {Math.round(p.accuracy * 100)}%
                       </p>
                     </div>
                     <div className="flex flex-col items-end ml-4 space-y-2">
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-600">
                         {new Date(p.timestamp).toLocaleString()}
                       </p>
                       <button
                         onClick={() => toggle(i)}
-                        className="text-gray-300 hover:text-white focus:outline-none"
+                        className="text-gray-700 hover:text-gray-900 focus:outline-none"
                       >
-                        {expanded === i ? <FaChevronUp /> : <FaChevronDown />}
-                      </button>
-                      <button
-                        onClick={() => setConfirmIdx(i)}
-                        className="text-red-500 hover:text-red-400 focus:outline-none"
-                      >
-                        <FaTrash />
+                        {expanded === i ? (
+                          <FaChevronUp size={18} />
+                        ) : (
+                          <FaChevronDown size={18} />
+                        )}
                       </button>
                     </div>
                   </div>
 
-                  <div className="mt-2 text-gray-300 prose prose-invert max-w-none">
+                  <div className="mt-2 text-gray-700 prose max-w-none text-sm md:text-base">
                     {expanded === i ? (
-                      <ReactMarkdown>{p.recommendation}</ReactMarkdown>
+                      <div className="overflow-y-auto max-h-[200px]">
+                        <ReactMarkdown>{p.recommendation}</ReactMarkdown>
+                      </div>
                     ) : (
                       <ReactMarkdown>{truncated}</ReactMarkdown>
                     )}
@@ -130,10 +129,20 @@ const ViewPreviousHistory: React.FC = () => {
                 </div>
 
                 {expanded === i && (
-                  <div className="px-4 pb-4 text-gray-400 text-xs flex justify-end">
+                  <div className="px-4 pb-4 text-gray-600 text-xs flex justify-end">
                     Viewed on {new Date(p.timestamp).toLocaleString()}
                   </div>
                 )}
+                {/* Delete Button at the bottom right */}
+                <div className="p-4 flex justify-end">
+                  <button
+                    onClick={() => setConfirmIdx(i)}
+                    className="w-auto min-w-[80px] max-w-[100px] text-white bg-red-500 hover:bg-red-600 focus:outline-none border border-red-700 flex items-center justify-center gap-1 text-xs md:text-sm px-2 py-1 rounded"
+                  >
+                    DELETE
+                    <FaTrash size={12} />
+                  </button>
+                </div>
               </div>
             );
           })}

@@ -91,7 +91,7 @@ ${JSON.stringify(formData)}`;
   ];
 
   return (
-    <div className="min-h-screen pt-20 pb-12 flex justify-center bg-[#f6f9fb]">
+    <div className="min-h-screen pb-12 flex justify-center bg-[#f6f9fb]">
       <div className="w-full max-w-md p-6">
         <h2 className="text-2xl font-bold mb-6 text-center">
           Stroke Risk Prediction

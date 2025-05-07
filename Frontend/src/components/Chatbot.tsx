@@ -1,34 +1,24 @@
-// frontend/src/components/Chatbot.tsx
-import React, { useState, useEffect } from "react";
-import { FaPaperPlane, FaHistory, FaPlus, FaTrash } from "react-icons/fa";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { MdPlayArrow } from "react-icons/md";
+import { RiChatNewLine } from "react-icons/ri";
+import { MdHistory } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+import { motion, useAnimation } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "../context/AuthContext";
-
-import { API_BASE_URL } from "../config";
-
-import Boticon from "../../images/Boticon.png"; // Assuming you have a Boticon image in your assets
-
-// Define the message type
+import botlogo from "../../public/Boticon.png";
 interface Message {
   text: string;
   sender: "user" | "bot";
   timestamp?: Date;
 }
 
-// Define a type for Chat Sessions (history)
 interface ChatSession {
   _id: string;
   userId: string;
   messages: Message[];
   createdAt: string;
 }
-
-// Configurable motivational quote and intro text
-const motivationalQuote =
-  "Your health is your greatest wealth — let’s take care of it today!";
-const introText =
-  "I am AI-med Assis🤖. I provide assistance and insights exclusively based on your medical profile and history. Feel free to ask your queries";
 
 const Chatbot: React.FC = () => {
   const { user } = useAuth();
@@ -37,28 +27,59 @@ const Chatbot: React.FC = () => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [chatVisible, setChatVisible] = useState<boolean>(false);
   const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [selectedHistorySession, setSelectedHistorySession] =
+    useState<ChatSession | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
   const [historyLoading, setHistoryLoading] = useState<boolean>(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [showToggleButton, setShowToggleButton] = useState(false);
+  const controls = useAnimation();
+  const interactionRef = useRef<HTMLDivElement>(null);
 
-  // Greet the user on first activation
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    messagesEndRef.current?.scrollIntoView({ behavior, block: "end" });
+  }, []);
+
   useEffect(() => {
-    if (chatVisible && messages.length === 0 && user) {
-      const greeting: Message = {
-        text: `Hi ${user.username}! 👋\n\n${introText}`,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages([greeting]);
+    if (
+      chatVisible &&
+      !showHistory &&
+      !selectedHistorySession &&
+      chatContainerRef.current
+    ) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
-  }, [chatVisible, user, messages.length]);
+  }, [messages, chatVisible, showHistory, selectedHistorySession]);
 
-  // Fetch chat history when history sidebar is toggled on
+  useEffect(() => {
+    if (
+      chatVisible &&
+      messages.length === 0 &&
+      user &&
+      !showHistory &&
+      !selectedHistorySession
+    ) {
+      setMessages([
+        {
+          text: `Hi ${user.username}! 👋\n\nI am Healtront🤖, ypur personalized AI-Med Assist. I provide assistance and insights exclusively based on your medical profile and history. Feel free to ask your queries`,
+          sender: "bot",
+          timestamp: new Date(),
+        },
+      ]);
+    }
+  }, [chatVisible, user, messages.length, showHistory, selectedHistorySession]);
+
   useEffect(() => {
     const fetchHistory = async () => {
       if (user && showHistory) {
         try {
           setHistoryLoading(true);
-          const res = await fetch(`${API_BASE_URL}/chat/history/${user._id}`);
+          const res = await fetch(
+            `http://localhost:5000/api/chat/history/${user._id}`
+          );
           const data = await res.json();
           setChatHistory(data.sessions || []);
         } catch (error) {
@@ -71,12 +92,12 @@ const Chatbot: React.FC = () => {
     fetchHistory();
   }, [showHistory, user]);
 
-  // Function to delete a chat session by its ID
   const handleDeleteSession = async (sessionId: string) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/chat/history/${sessionId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/chat/history/${sessionId}`,
+        { method: "DELETE" }
+      );
       if (res.ok) {
         setChatHistory(
           chatHistory.filter((session) => session._id !== sessionId)
@@ -89,29 +110,18 @@ const Chatbot: React.FC = () => {
     }
   };
 
-  // Build an extended prompt that incorporates user profile details
   const buildExtendedPrompt = (input: string): string => {
     if (!user) return input;
-    // Prepare a summary of the user's info in a markdown-friendly format
-    const userInfo = `**User Details:**
-- **Name:** ${user.username}
-- **Age:** ${user.age}
-- **Gender:** ${user.gender}
-- **Height:** ${user.height} cm
-- **Weight:** ${user.weight} kg
-- **Medical Conditions:** ${
+    const userInfo = `**User Details:**\n- **Name:** ${
+      user.username
+    }\n- **Age:** ${user.age}\n- **Gender:** ${user.gender}\n- **Height:** ${
+      user.height
+    } cm\n- **Weight:** ${user.weight} kg\n- **Medical Conditions:** ${
       user.medicalConditions ? user.medicalConditions.join(", ") : "None"
     }`;
-
-    // Instruct the backend: For medically relevant queries, include suggestions using bullet points.
-    return `${userInfo}
-
-As Healtron - personalized AI-med Assist, please answer the following question if it is related to either medical/health topics **or** if it is requesting details from the user's profile. Otherwise, respond with "I'm sorry, I can only assist with medical-related inquiries." If the query is medically relevant and requires recommendations, please provide your suggestions using bullet points according to the question and make the suggestions crisp and short in most cases, kindly add medical suggesstions for all queries related to user health and medical query, if the user directly asks for suggestions or recommendations give them in detail.
-
-**User Question:** ${input}`;
+    return `${userInfo}\n\nAs AI-med Assist, please answer the following question if it is related to either medical/health topics **or** if it is requesting details from the user's profile. Otherwise, respond with "I'm sorry, I can only assist with medical-related inquiries." If the query is medically relevant and requires recommendations, please provide your suggestions using bullet points according to the question and make the suggestions crisp and short in most cases, kindly add medical suggesstions for all queries related to user health and medical query, if the user directly asks for suggestions or recommendations give them in detail.\n\n**User Question:** ${input}`;
   };
 
-  // Send user message to backend
   const sendMessage = async (input: string) => {
     if (!input.trim()) return;
     const userMessage: Message = {
@@ -123,10 +133,8 @@ As Healtron - personalized AI-med Assist, please answer the following question i
     setUserInput("");
     setIsSending(true);
     try {
-      // Build the extended prompt with user data for context analysis
       const extendedPrompt = buildExtendedPrompt(input);
-      // Replace with your actual backend endpoint for chatbot response
-      const response = await fetch(`${API_BASE_URL}/chat`, {
+      const response = await fetch("http://localhost:5000/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: extendedPrompt, userId: user?._id }),
@@ -153,149 +161,358 @@ As Healtron - personalized AI-med Assist, please answer the following question i
     }
   };
 
-  // Handle new chat: Save current conversation, then clear messages
-  const handleNewChat = async () => {
+  const handleNewChat = () => {
     if (messages.length > 0 && user) {
-      try {
-        await fetch(`${API_BASE_URL}/chat/history`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: user._id, messages }),
-        });
-      } catch (error) {
-        console.error("Error saving chat session", error);
-      }
+      fetch("http://localhost:5000/api/chat/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user._id, messages }),
+      }).catch((error) => console.error("Error saving chat session", error));
     }
     setMessages([]);
+    setSelectedHistorySession(null);
   };
 
-  const toggleChat = () => setChatVisible(!chatVisible);
+  const toggleChat = () => {
+    setChatVisible(!chatVisible);
+    document.body.style.overflow = !chatVisible ? "hidden" : "";
+    setShowHistory(false);
+    setSelectedHistorySession(null);
+  };
+
+  const closeChat = () => {
+    setChatVisible(false);
+    document.body.style.overflow = "";
+    setShowHistory(false);
+    setSelectedHistorySession(null);
+  };
+
+  const loadHistorySession = (session: ChatSession) => {
+    setMessages(session.messages);
+    setSelectedHistorySession(session);
+    setShowHistory(false);
+  };
+
+  const goBackToChat = () => {
+    setSelectedHistorySession(null);
+  };
+
+  const handleInteractionClick = () => {
+    setShowToggleButton(true);
+    controls.start({ scale: 1.3, opacity: 0 }); // Increased scale for bigger effect
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Chat Toggle Button using the provided image */}
-      <button
-        onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 p-2 bg-gray-800 rounded-full shadow-lg"
-      >
-        <img src={Boticon} alt="Chatbot" className="w-10 h-10 object-contain" />
-      </button>
+      <style jsx>{`
+        .interaction-circle {
+          width: 70px; /* Increased size */
+          height: 70px; /* Increased size */
+          border-radius: 50%;
+          background-image: radial-gradient(circle, #93c5fd, #60a5fa);
+          position: absolute;
+          bottom: 6px;
+          right: 6px;
+          z-index: 49;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .blowing-circle {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: rgba(96, 165, 250, 0.4);
+          animation: blow 1.5s infinite ease-in-out;
+        }
+        @keyframes blow {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1.4);
+            opacity: 0;
+          }
+        }
+        @media (max-width: 768px) {
+          .chatbot-modal {
+            width: 95% !important;
+            height: 80% !important;
+          }
+          .chatbot-header {
+            padding: 0.75rem !important;
+          }
+          .chatbot-title {
+            font-size: 1.25rem !important;
+          }
+          .chatbot-messages {
+            padding: 0.5rem !important;
+          }
+          .message-content {
+            max-width: 85% !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.875rem !important;
+          }
+          .chatbot-input-container {
+            padding: 0.5rem !important;
+          }
+          .chatbot-input {
+            padding: 0.5rem !important;
+            font-size: 0.875rem !important;
+          }
+          .chatbot-send-button {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .chatbot-modal {
+            height: 90% !important;
+          }
+          .message-content {
+            max-width: 90% !important;
+          }
+        }
+      `}</style>
 
-      {chatVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          className="fixed bottom-20 right-6 w-96 bg-gray-900 text-white rounded-lg shadow-xl overflow-hidden flex flex-col"
+      {!showToggleButton && (
+        <div
+          ref={interactionRef}
+          className="interaction-circle"
+          onClick={handleInteractionClick}
         >
-          {/* Header with History and New Chat icons */}
-          <div className="flex items-center justify-between bg-gray-800 p-3 border-b border-gray-700">
-            <span className="font-bold text-lg">AI-med Assist</span>
-            <div className="flex space-x-3">
-              <button
-                onClick={() => setShowHistory(true)}
-                className="hover:text-blue-400"
-              >
-                <FaHistory />
-              </button>
-              <button onClick={handleNewChat} className="hover:text-blue-400">
-                <FaPlus />
-              </button>
-            </div>
-          </div>
-          {/* Chat Area: fixed height with scroll */}
-          <div
-            className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-800"
-            style={{ maxHeight: "450px" }}
-          >
-            {messages.map((msg, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className={`p-3 rounded-xl text-sm shadow-md max-w-[75%] ${
-                  msg.sender === "user"
-                    ? "bg-blue-600 self-end"
-                    : "bg-gray-700 self-start"
-                }`}
-              >
-                {msg.sender === "bot" ? (
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                ) : (
-                  <span>{msg.text}</span>
-                )}
-              </motion.div>
-            ))}
-          </div>
-          {/* Input Area */}
-          <div className="flex items-center p-3 border-t border-gray-700 bg-gray-800">
-            <input
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage(userInput)}
-              placeholder="Type your message..."
-              className="flex-1 p-2 rounded-lg text-gray-900 focus:outline-none"
-              disabled={isSending}
-            />
-            <button
-              onClick={() => sendMessage(userInput)}
-              disabled={isSending}
-              className="ml-2 bg-blue-600 p-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {isSending ? "..." : <FaPaperPlane className="text-white" />}
-            </button>
-          </div>
-        </motion.div>
+          <motion.div
+            className="blowing-circle"
+            animate={controls}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
       )}
 
-      {/* Chat History Sidebar */}
-      {showHistory && (
-        <div className="fixed top-0 right-0 h-full w-1/3 bg-gray-900 shadow-2xl p-6 z-50 overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-white">Chat History</h2>
-            <button
-              onClick={() => setShowHistory(false)}
-              className="text-white hover:text-blue-400"
-            >
-              X
-            </button>
-          </div>
-          {historyLoading ? (
-            <p className="text-blue-400">Loading history...</p>
-          ) : chatHistory.length > 0 ? (
-            chatHistory.map((session) => (
-              <div
-                key={session._id}
-                className="mb-4 border-b border-gray-700 pb-2"
-              >
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-300">
-                    {new Date(session.createdAt).toLocaleString()}
-                  </p>
-                  <button
-                    onClick={() => handleDeleteSession(session._id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-                {session.messages.map((msg: Message, idx: number) => (
-                  <p
-                    key={idx}
-                    className={`text-sm ${
-                      msg.sender === "user" ? "text-blue-400" : "text-gray-400"
-                    }`}
-                  >
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  </p>
-                ))}
+      {showToggleButton && (
+        <motion.button
+          onClick={toggleChat}
+          className="p-3 bg-blue-500 rounded-full shadow-lg focus:outline-none"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            width: "60px",
+            height: "60px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }} // Increased button size
+        >
+          <img
+            src={botlogo}
+            alt="Chatbot"
+            className="w-16 h-16 object-contain"
+          />
+        </motion.button>
+      )}
+
+      {chatVisible && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[51]">
+          <motion.div
+            ref={backdropRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed top-0 left-0 w-full h-full bg-black/30 backdrop-blur-md z-[50]"
+            onClick={closeChat}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            className="w-[900px] max-w-4xl h-[550px] bg-white text-gray-900 rounded-2xl shadow-xl overflow-hidden flex flex-col z-[52] chatbot-modal"
+            style={{ pointerEvents: "auto" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between bg-gray-50 p-4 border-b border-gray-300 chatbot-header">
+              <span className="font-bold text-2xl chatbot-title">Healtron</span>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => {
+                    setShowHistory(!showHistory);
+                    setSelectedHistorySession(null);
+                  }}
+                  className="hover:bg-gray-200 rounded p-1 transition-colors duration-200"
+                >
+                  <MdHistory size={24} className="text-gray-600" />
+                </button>
+                <button
+                  onClick={handleNewChat}
+                  className="hover:bg-gray-200 rounded p-1 transition-colors duration-200"
+                >
+                  <RiChatNewLine size={24} className="text-gray-600" />
+                </button>
+                <button
+                  onClick={closeChat}
+                  className="text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded p-1 transition-colors duration-200"
+                >
+                  <MdClose size={24} />
+                </button>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-300">No chat history available.</p>
-          )}
+            </div>
+
+            <div className="flex h-full overflow-hidden">
+              <div
+                className="flex-1 overflow-y-auto p-3 chatbot-messages"
+                ref={chatContainerRef}
+              >
+                {showHistory ? (
+                  <div>
+                    <h3 className="font-bold mb-2 flex justify-between items-center">
+                      Chat History
+                      <button
+                        onClick={() => setShowHistory(false)}
+                        className="text-gray-600 hover:text-gray-800 text-sm"
+                      >
+                        Close
+                      </button>
+                    </h3>
+                    {historyLoading ? (
+                      <p className="text-blue-400">Loading...</p>
+                    ) : chatHistory.length > 0 ? (
+                      chatHistory.map((session) => (
+                        <div
+                          key={session._id}
+                          className="mb-3 border-b border-gray-300 pb-2 last:border-b-0 cursor-pointer hover:bg-gray-200 p-2 rounded flex items-center justify-between"
+                          onClick={() => loadHistorySession(session)}
+                        >
+                          <div>
+                            <p className="text-sm text-gray-700">
+                              {new Date(session.createdAt).toLocaleString()}
+                            </p>
+                            {session.messages
+                              .slice(-1)
+                              .map((msg: Message, idx: number) => (
+                                <p
+                                  key={idx}
+                                  className="text-xs text-gray-600 italic"
+                                >
+                                  {msg.sender === "user" ? "You: " : "Bot: "}
+                                  {msg.text.substring(0, 30)}...
+                                </p>
+                              ))}
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteSession(session._id);
+                            }}
+                            className="bg-red-500 text-white font-bold py-1 px-2 rounded hover:bg-red-700 flex items-center space-x-1"
+                          >
+                            <MdClose size={16} /> <span>Delete</span>
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-600">No history available.</p>
+                    )}
+                  </div>
+                ) : selectedHistorySession ? (
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <h3 className="font-bold">Previous Chat</h3>
+                      <button
+                        onClick={goBackToChat}
+                        className="text-blue-500 hover:text-blue-700 text-sm"
+                      >
+                        Back to Chat
+                      </button>
+                    </div>
+                    {selectedHistorySession.messages.map((msg, index) => (
+                      <div
+                        key={index}
+                        className={`mb-2 flex ${
+                          msg.sender === "user"
+                            ? "justify-end"
+                            : "justify-start"
+                        }`}
+                      >
+                        <motion.div
+                          className={`p-3 px-6 rounded-2xl shadow-md text-sm break-words message-content ${
+                            msg.sender === "user"
+                              ? "bg-[#2092fa] text-white rounded-br-none"
+                              : "bg-gray-100 text-gray-800 rounded-bl-none"
+                          }`}
+                          style={{
+                            maxWidth: "75%",
+                            display: "inline-block",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {msg.sender === "bot" ? (
+                            <ReactMarkdown>{msg.text}</ReactMarkdown>
+                          ) : (
+                            <span>{msg.text}</span>
+                          )}
+                        </motion.div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  messages.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`mb-2 flex ${
+                        msg.sender === "user" ? "justify-end" : "justify-start"
+                      }`}
+                    >
+                      <motion.div
+                        className={`p-3 px-6 rounded-2xl shadow-md text-sm break-words message-content ${
+                          msg.sender === "user"
+                            ? "bg-[#2092fa] text-white rounded-br-none"
+                            : "bg-gray-100 text-gray-800 rounded-bl-none"
+                        }`}
+                        style={{
+                          maxWidth: "75%",
+                          display: "inline-block",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {msg.sender === "bot" ? (
+                          <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        ) : (
+                          <span>{msg.text}</span>
+                        )}
+                      </motion.div>
+                    </div>
+                  ))
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+
+            <div className="flex items-center p-3 border-t border-gray-200 bg-white chatbot-input-container">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage(userInput)}
+                placeholder="Type your message..."
+                className="flex-1 p-2 rounded-2xl text-gray-900 focus:outline-none border-2 border-[#2092fa] chatbot-input"
+                disabled={isSending || showHistory || selectedHistorySession}
+              />
+              <button
+                onClick={() => sendMessage(userInput)}
+                disabled={isSending || showHistory || selectedHistorySession}
+                className="ml-2 bg-[#2092fa] p-1 h-11 w-11 rounded-3xl hover:bg-[#187ade] transition-colors flex items-center justify-center chatbot-send-button"
+              >
+                {isSending ? (
+                  "..."
+                ) : (
+                  <MdPlayArrow className="text-white" size={30} />
+                )}
+              </button>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>

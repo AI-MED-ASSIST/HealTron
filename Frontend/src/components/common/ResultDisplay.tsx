@@ -47,15 +47,7 @@ const ResultDisplay: React.FC<Props> = ({ result }) => {
   };
 
   return (
-    <div className="relative p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto pt-20">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-20 left-4 text-blue-600 hover:text-blue-800"
-      >
-        ⬅️ Back
-      </button>
-
+    <div className="relative p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto mt-2">
       {/* Title */}
       <h2 className="text-2xl font-bold mb-6 text-center">
         {diseaseType} Prediction Report

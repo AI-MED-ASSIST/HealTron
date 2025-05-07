@@ -1,4 +1,3 @@
-// frontend/src/modals/MedicalHistoryModal.tsx
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { getDiseases } from "../services/diseaseService";
@@ -60,8 +59,8 @@ const MedicalHistoryModal: React.FC<Props> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 p-2 z-50">
-      <div className="bg-gray-800 p-6 rounded w-full max-w-md">
-        <h2 className="text-xl mb-4 font-bold text-white">
+      <div className="bg-gray-50 p-6 rounded-2xl w-full max-w-xl border-2 border-gray-700">
+        <h2 className="text-xl mb-4 font-bold text-center text-gray-800">
           Add Medical Conditions
         </h2>
 
@@ -70,12 +69,12 @@ const MedicalHistoryModal: React.FC<Props> = ({
           {conditions.map((cond, idx) => (
             <div
               key={idx}
-              className="flex items-center bg-gray-700 px-3 py-1 rounded-full"
+              className="flex items-center bg-white px-3 py-1 rounded-full border border-gray-400"
             >
-              <span className="mr-2 text-white">{cond}</span>
+              <span className="mr-2 text-gray-700">{cond}</span>
               <button
                 onClick={() => handleDeleteCondition(cond)}
-                className="text-red-500"
+                className="text-gray-500 hover:text-gray-800 transition-colors duration-200"
               >
                 <FaTimes />
               </button>
@@ -90,24 +89,24 @@ const MedicalHistoryModal: React.FC<Props> = ({
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
             placeholder="Search medical conditions..."
-            className="w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none"
+            className="w-full p-3 rounded-md bg-white text-gray-700 border-2 border-gray-400 focus:outline-none focus:border-[#2092fa]"
           />
           {filterText && (
             <>
               {filteredDiseases.length > 0 ? (
-                <ul className="absolute z-10 w-full bg-gray-700 rounded-md mt-1 max-h-48 overflow-y-auto border border-gray-600">
+                <ul className="absolute z-10 w-full bg-white rounded-md mt-1 max-h-48 overflow-y-auto border border-gray-400">
                   {filteredDiseases.map((disease) => (
                     <li
                       key={disease._id}
                       onClick={() => handleSelectDisease(disease.name)}
-                      className="cursor-pointer p-2 hover:bg-gray-600 text-white"
+                      className="cursor-pointer p-2 hover:bg-gray-100 text-gray-700"
                     >
                       {disease.name}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <div className="absolute z-10 w-full bg-gray-700 rounded-md mt-1 p-2 border border-gray-600 text-white">
+                <div className="absolute z-10 w-full bg-white rounded-md mt-1 p-2 border border-gray-400 text-gray-700">
                   No data available
                 </div>
               )}
@@ -125,7 +124,7 @@ const MedicalHistoryModal: React.FC<Props> = ({
           </button>
           <button
             onClick={handleSave}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-[#2092fa] text-white px-4 py-2 rounded hover:bg-blue-500 transition"
           >
             Save
           </button>

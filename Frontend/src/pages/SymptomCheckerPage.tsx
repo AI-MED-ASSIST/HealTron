@@ -1,4 +1,3 @@
-// src/pages/SymptomCheckerPage.tsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -7,14 +6,13 @@ import { predictDisease } from "../services/predictService";
 import { addMedicalCondition } from "../services/userService";
 import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
-import ConfirmSaveModal from "../modals/ConfirmSaveModal";
+import { motion } from "framer-motion";
 
 const steps = ["User Details", "Select Symptoms", "Results"] as const;
 
 const SymptomCheckerPage: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
-
   const [currentStep, setCurrentStep] = useState(0);
   const [agreed, setAgreed] = useState(false);
   const [symptoms, setSymptoms] = useState<string[]>([]);
@@ -27,18 +25,15 @@ const SymptomCheckerPage: React.FC = () => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showConfirmSaveModal, setShowConfirmSaveModal] = useState(false);
 
-  // Helper to display nulls as the string "null"
   const display = (val: any) =>
     val === null || val === undefined ? "null" : val;
 
-  // Load symptom list
   useEffect(() => {
     setLoading(true);
     fetchSymptoms()
       .then(setSymptoms)
-      .catch(() => setError("Failed to load symptoms"))
+      .catch(() => setError("Failed toload symptoms"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -94,9 +89,9 @@ const SymptomCheckerPage: React.FC = () => {
         prediction.disease
       );
       login({ ...user!, medicalConditions: updatedConditions });
+      alert("Added to medical conditions!");
     } catch (e: any) {
-      console.error(e);
-      setError(e.message || "Failed to add condition");
+      alert(e.message);
     } finally {
       setLoading(false);
     }
@@ -106,93 +101,108 @@ const SymptomCheckerPage: React.FC = () => {
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Your Profile</h2>
-            <ul className="space-y-1">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-4 p-4 md:p-6 flex flex-col items-center min-h-[200px]"
+          >
+            <h2 className="text-xl md:text-2xl font-bold text-blue-400 text-center mb-2">
+              Your Profile
+            </h2>
+            <ul className="space-y-2 mt-2 text-center w-full">
               <li>
-                <strong>Username:</strong> {display(user?.username)}
+                <strong>Username:</strong>{" "}
+                <span className="text-gray-700">{display(user?.username)}</span>
               </li>
               <li>
-                <strong>Age:</strong> {display(user?.age)}
+                <strong>Age:</strong>{" "}
+                <span className="text-gray-700">{display(user?.age)}</span>
               </li>
               <li>
-                <strong>Gender:</strong> {display(user?.gender)}
+                <strong>Gender:</strong>{" "}
+                <span className="text-gray-700">{display(user?.gender)}</span>
               </li>
               <li>
-                <strong>Height:</strong> {display(user?.height)} cm
+                <strong>Height:</strong>{" "}
+                <span className="text-gray-700">
+                  {display(user?.height)} cm
+                </span>
               </li>
               <li>
-                <strong>Weight:</strong> {display(user?.weight)} kg
+                <strong>Weight:</strong>{" "}
+                <span className="text-gray-700">
+                  {display(user?.weight)} kg
+                </span>
               </li>
-              <li>
+              <li className="gap-2">
                 <strong>Medical Conditions:</strong>{" "}
-                {user?.medicalConditions === null
-                  ? "null"
-                  : user?.medicalConditions?.length
-                  ? user.medicalConditions.join(", ")
-                  : "None"}
+                <span className="text-gray-700">
+                  {user?.medicalConditions === null
+                    ? "null"
+                    : user?.medicalConditions?.length
+                    ? user.medicalConditions.join(", ")
+                    : "None"}
+                </span>
               </li>
             </ul>
-            <div className="flex items-center mt-4">
-              <input
-                id="agree"
-                type="checkbox"
-                checked={agreed}
-                onChange={() => setAgreed(!agreed)}
-                className="mr-2"
-              />
-              <label htmlFor="agree" className="select-none">
-                I agree to the terms and conditions
-              </label>
-            </div>
-          </div>
+          </motion.div>
         );
 
       case 1:
         return (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Choose Symptoms</h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="p-4"
+          >
+            <h2 className="text-xl font-bold text-blue-400 mb-2 text-center">
+              Choose Symptoms
+            </h2>
             {loading ? (
               <div className="text-center py-10">
-                <FaSpinner className="animate-spin text-4xl mx-auto" />
+                <FaSpinner className="animate-spin text-4xl mx-auto text-blue-400" />
               </div>
             ) : (
               <>
                 <input
                   type="text"
-                  placeholder="Search..."
-                  className="w-full p-2 rounded bg-gray-800 text-white mb-4"
+                  placeholder="Search symptoms..."
+                  className="w-full p-2 rounded bg-gray-100 text-gray-700 mb-3 focus:border-[#2092fa] border border-gray-300 text-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-64 overflow-y-auto mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-[120px] overflow-y-auto mb-3">
                   {filtered.map((sym) => (
                     <button
                       key={sym}
                       onClick={() => handleSelect(sym)}
-                      className={`px-3 py-1 rounded-full border ${
+                      className={`px-2 py-1 rounded-full border text-sm ${
                         selected.includes(sym)
                           ? "bg-blue-500 text-white border-blue-500"
-                          : "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
-                      }`}
+                          : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                      } focus:outline-none`}
                     >
                       {sym}
                     </button>
                   ))}
                 </div>
                 {selected.length > 0 && (
-                  <div className="mt-4">
-                    <h3 className="font-semibold mb-2">Selected:</h3>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mt-3">
+                    <h3 className="font-semibold text-blue-400 mb-1 text-sm">
+                      Selected:
+                    </h3>
+                    <div className="flex flex-wrap gap-1">
                       {selected.map((s) => (
                         <span
                           key={s}
-                          className="flex items-center bg-gray-700 px-3 py-1 rounded-full"
+                          className="inline-flex items-center bg-gray-100 px-2 py-0.5 rounded-full text-xs sm:text-sm text-gray-700 border border-gray-300"
                         >
                           {s}
                           <button
                             onClick={() => handleSelect(s)}
-                            className="ml-2 text-gray-400 hover:text-white"
+                            className="ml-1 text-gray-400 hover:text-gray-700 focus:outline-none text-xs"
                           >
                             &times;
                           </button>
@@ -203,47 +213,72 @@ const SymptomCheckerPage: React.FC = () => {
                 )}
               </>
             )}
-          </div>
+          </motion.div>
         );
 
       case 2:
         return (
-          <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-4 p-4 md:p-6 flex flex-col items-center w-full max-w-full"
+          >
             {loading ? (
               <div className="text-center py-10">
-                <FaSpinner className="animate-spin text-4xl mx-auto" />
-                <p className="mt-2">Fetching prediction...</p>
+                <FaSpinner className="animate-spin text-4xl mx-auto text-blue-400" />
+                <p className="mt-2 text-gray-700">Fetching prediction...</p>
               </div>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : prediction ? (
               <>
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">Result</h2>
-                  <p>
-                    <strong>Disease:</strong> {prediction.disease}
-                  </p>
-                  <p>
-                    <strong>Accuracy:</strong>{" "}
-                    {Math.round(prediction.accuracy * 100)}%
-                  </p>
+                <div className="w-full max-w-3xl mx-auto">
+                  <h2 className="text-2xl md:text-3xl text-center font-bold text-blue-600 mb-2">
+                    Result
+                  </h2>
+                  <div className="flex items-center mb-2">
+                    <p>
+                      <strong className="text-md md:text-lg">Disease:</strong>{" "}
+                      <span className="text-gray-900 text-md md:text-lg">
+                        {prediction.disease}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-3">
+                    <strong className="text-md md:text-lg">Accuracy:</strong>
+                    <div className="w-full sm:w-48">
+                      <div className="w-full bg-gray-200 rounded-full h-4 flex items-center">
+                        <div
+                          className="bg-blue-500 h-4 rounded-full transition-all duration-500"
+                          style={{ width: `${prediction.accuracy * 100}%` }}
+                        ></div>
+                        <div className="text-xs text-gray-600 ml-2">
+                          {Math.round(prediction.accuracy * 100)}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Recommendation</h3>
-                  <span>
+                <div className="w-full max-w-3xl mx-auto">
+                  <h3 className="font-semibold text-blue-400 mb-1">
+                    Recommendation
+                  </h3>
+                  <div className="bg-gray-50 rounded-md p-4 text-gray-700 border border-gray-300 max-h-[180px] overflow-y-auto">
                     <ReactMarkdown>{prediction.recommendation}</ReactMarkdown>
-                  </span>
+                  </div>
                 </div>
-                <button
-                  onClick={() => setShowConfirmSaveModal(true)}
-                  disabled={loading}
-                  className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
-                >
-                  {loading ? "Adding…" : "ADD to Medical Conditions"}
-                </button>
+                <div className="mt-4 flex justify-center">
+                  <button
+                    onClick={handleAddCondition}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Add to Medical Conditions
+                  </button>
+                </div>
               </>
             ) : null}
-          </div>
+          </motion.div>
         );
 
       default:
@@ -252,51 +287,84 @@ const SymptomCheckerPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 pt-20">
-      <div className="max-w-7xl mx-auto">
-        {/* Stepper */}
-        <div className="flex justify-between mb-8">
-          {steps.map((_, idx) => (
-            <div key={idx} className="flex items-center flex-1">
-              <div
-                className={`w-10 h-10 flex items-center justify-center rounded-full text-lg font-medium ${
-                  idx === currentStep
-                    ? "bg-blue-500"
-                    : idx < currentStep
-                    ? "bg-green-500"
-                    : "bg-gray-700"
-                }`}
-              >
-                {idx + 1}
-              </div>
-              {idx < steps.length - 1 && (
+    <div
+      className="min-h-screen py-6 md:py-10 flex flex-col items-center "
+      style={{
+        backgroundColor: "#f6f9fb",
+        backgroundImage: `
+          radial-gradient(
+            circle at bottom center,        /* Gradient from bottom */
+            rgba(0, 119, 255, 0.25) 0%,
+            rgba(246, 249, 251, 1) 40%
+          )
+        `,
+        backgroundSize: "210% 190%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "50% 100%" /* Start gradient from bottom */,
+      }}
+    >
+      <div
+        className={`mx-2 w-[calc(100%-1rem)] sm:mx-auto sm:w-[95%] rounded-lg shadow-2xl border border-[#2092fa] bg-gray-50 ${
+          currentStep === 2 ? "md:max-w-[900px]" : "md:max-w-3xl"
+        }`}
+      >
+        <div className="flex justify-center items-center mb-4 p-4">
+          <div className="flex justify-between items-center w-full max-w-md gap-0">
+            {steps.map((_, idx) => (
+              <div key={idx} className="flex items-center">
                 <div
-                  className={`flex-1 h-1 mx-2 ${
-                    idx < currentStep ? "bg-green-500" : "bg-gray-700"
+                  className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full text-sm sm:text-lg font-medium z-10 ${
+                    idx === currentStep
+                      ? "bg-[#2092fa] text-white"
+                      : idx < currentStep
+                      ? "bg-[#48bb78] text-white"
+                      : "bg-gray-700 text-white"
                   }`}
+                >
+                  {idx + 1}
+                </div>
+                {idx < steps.length - 1 && (
+                  <div
+                    className={`flex-1 h-0.5 ${
+                      idx < currentStep ? "bg-[#48bb78]" : "bg-gray-700"
+                    }`}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>{renderStep()}</div>
+
+        <div className="mt-2 flex flex-row justify-between p-4 md:p-6">
+          <div className="flex items-center">
+            {currentStep === 0 && (
+              <div className="flex items-start sm:items-center mr-4">
+                <input
+                  id="agree"
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={() => setAgreed(!agreed)}
+                  className="mr-2 mt-1 sm:mt-0 form-checkbox h-5 w-5 text-blue-500 focus:ring-blue-500 border-gray-700 rounded"
                 />
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          {renderStep()}
-        </div>
-
-        {/* Navigation */}
-        <div className="mt-6 flex justify-between">
-          {currentStep > 0 ? (
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
-            >
-              <FaChevronLeft /> Back
-            </button>
-          ) : (
-            <div />
-          )}
+                <label
+                  htmlFor="agree"
+                  className="select-none text-gray-700 text-sm sm:text-base leading-tight"
+                >
+                  I agree to the terms and conditions
+                </label>
+              </div>
+            )}
+            {currentStep > 0 && (
+              <button
+                onClick={handleBack}
+                className="w-20 sm:w-24 h-8 sm:h-10 flex items-center justify-center gap-2 px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 focus:outline-none text-xs sm:text-sm"
+              >
+                <FaChevronLeft /> Back
+              </button>
+            )}
+          </div>
           {currentStep < steps.length - 1 ? (
             <button
               onClick={handleNext}
@@ -304,40 +372,28 @@ const SymptomCheckerPage: React.FC = () => {
                 (currentStep === 0 && !agreed) ||
                 (currentStep === 1 && selected.length === 0)
               }
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 rounded hover:bg-blue-400 disabled:opacity-50"
+              className="w-20 sm:w-24 h-8 sm:h-10 flex items-center justify-center gap-2 px-4 py-2 bg-[#2092fa] text-white rounded hover:bg-blue-500 disabled:opacity-50 focus:outline-none text-xs sm:text-sm"
             >
               Next <FaChevronRight />
             </button>
           ) : (
-            <div className="flex gap-4">
+            <div className="flex flex-row gap-3">
               <button
                 onClick={handleRestart}
-                className="px-4 py-2 bg-purple-500 rounded hover:bg-purple-400"
+                className="hidden md:block w-24 h-10 px-4 py-2 bg-[#6b46c1] text-white rounded hover:bg-[#553c9a] focus:outline-none text-sm"
               >
-                New Check
+                Check
               </button>
               <button
                 onClick={() => navigate("/")}
-                className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+                className="w-20 sm:w-24 h-8 sm:h-10 px-4 py-2 bg-[#2092fa] text-white rounded hover:bg-blue-500 focus:outline-none text-xs sm:text-sm"
               >
-                Return Home
+                Home
               </button>
             </div>
           )}
         </div>
       </div>
-
-      {/* Confirm Save Modal */}
-      <ConfirmSaveModal
-        isOpen={showConfirmSaveModal}
-        title="Confirm Add"
-        message={`Add "${prediction?.disease}" to your medical conditions?`}
-        onConfirm={() => {
-          setShowConfirmSaveModal(false);
-          handleAddCondition();
-        }}
-        onCancel={() => setShowConfirmSaveModal(false)}
-      />
     </div>
   );
 };

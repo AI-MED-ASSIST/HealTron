@@ -53,19 +53,7 @@ const PredictionHistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto pt-20">
-      <div className="mb-6 flex flex-col items-center relative">
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute left-0 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
-        >
-          &larr; Back
-        </button>
-        <h1 className="text-3xl font-bold text-center">
-          Disease Prediction History
-        </h1>
-      </div>
-
+    <div className="p-6 max-w-4xl mx-auto ">
       {loading ? (
         <p className="text-center text-gray-500">Loading history…</p>
       ) : history.length === 0 ? (
