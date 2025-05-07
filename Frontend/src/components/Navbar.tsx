@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
-          <div className="text-xl sm:text-2xl font-extrabold text-gray-800 flex-shrink-0">
+          <div className="text-xl sm:text-2xl font-extrabold text-gray-800 flex-shrink-0 pl-2">
             HEAL<span className="text-[#2092fa]">TRON</span>
           </div>
 
