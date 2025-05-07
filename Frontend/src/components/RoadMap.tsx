@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import first from "../../public/RoadMap/firstimage.png";
 import second from "../../public/RoadMap/secondimage.png";
@@ -7,7 +8,7 @@ import third from "../../public/RoadMap/thirdimage.png";
 const RoadMap = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, threshold: 0.1 });
-
+  const navigate = useNavigate();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -46,7 +47,7 @@ const RoadMap = () => {
   ];
 
   const handleCheckClick = () => {
-    window.location.href = "/symptom-checker";
+    navigate("/symptom-checker");
   };
 
   return (
