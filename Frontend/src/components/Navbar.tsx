@@ -101,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ onProfileClick, sidebarOpen }) => {
                 className="h-8 w-8 xs:h-9 xs:w-9 sm:h-10 sm:w-10 rounded-full object-cover cursor-pointer border border-gray-800"
               />
               {user?.username && (
-                <span className="ml-2 hidden lg:inline text-sm lg:text-base text-gray-700 font-bold">
+                <span className="ml-2 mr-2 hidden lg:inline text-sm lg:text-base text-gray-700 font-bold">
                   {user.username}
                 </span>
               )}
