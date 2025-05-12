@@ -30,7 +30,7 @@ const teamMembers = [
 ];
 
 const teamMentor = {
-  name: "Mentor Name",
+  name: "Mrs. R Akileshwari AP/AI&DS",
   role: "Team Mentor",
   image: akila,
 };
