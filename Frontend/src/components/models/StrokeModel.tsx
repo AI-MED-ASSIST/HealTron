@@ -53,7 +53,7 @@ const StrokeModel: React.FC = () => {
       const prompt = `You are a medical assistant. Evaluate stroke risk. Input is JSON with patient metrics.
 Output MUST be pure JSON with these keys:
   • probability (0–1),
-  • modelAccuracy (0–1),
+  • modelAccuracy (0.8–1),
   • details (array of {metric,value,status,recommendedRange}),
   • recommendation (markdown).
 Here is the input:

@@ -57,7 +57,7 @@ const PneumoniaModel: React.FC = () => {
 Input: JSON with one field, image (base64).\n
 Output: A single valid JSON object with exactly these keys:\n` +
           `  • probability (0–1),\n` +
-          `  • modelAccuracy (0–1),\n` +
+          `  • modelAccuracy (0.8–1),\n` +
           `  • details (array of objects with keys metric, value, status, recommendedRange),\n` +
           `  • recommendation (markdown string).\n` +
           `Ensure that \"details\" is always present. If there are no metrics, set \"details\" to an empty array [].\n\n` +
